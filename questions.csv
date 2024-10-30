@@ -1,0 +1,6 @@
+﻿Enter the Address Class and leading Bit Pattern (separate by /) for the following ip: {ip}
+What is the prefix length for the subnet {subnet_mask} 
+What would the wildcard mask be for a prefix length of {prefix_length}
+"For a /{prefix_length} subnet, what is the subnet mask?"
+How many network bits are used in a network with a subnet mask of {subnet_mask}
+How many host bits are used in a network with a subnet mask of {subnet_mask}
