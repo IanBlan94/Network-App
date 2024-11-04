@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary To Decimal</title>
+
+    <style>
+        table { border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: center; border: 1px solid black; }
+    </style>
+</head>
+<body>
+    <h1>Binary to Decimal Conversion</h1>
+        
+    <table>
+        <tr>
+            <!-- Display headers -->
+            {% for header in headers %}
+                <th>{{ header }}</th>
+            {% endfor %}
+        </tr>
+
+    </table>
+
+    <!-- Display the random binary number generated in the backend -->
+    <p>Binary Number: <strong>{{ random_binary }}</strong></p>
+        
+   
+
+    <!-- Form to capture user guess -->
+    {% if not result %}
+        <form method="post">
+            <label for="user_guess">Enter the Decimal Value:</label>
+            <input type="number" id="user_guess" name="user_guess" required>
+            <button type="submit">Submit</button>
+        </form>
+    {% endif %}
+    
+
+    <!-- Display result after form submission -->
+    {% if result %}
+        <p>{{ result }}</p>
+        {% if correct %}
+            <p>{{correct}}</p>
+        {% endif %}
+        <form method="GET" action="{{ url_for('binary_to_decimal') }}">
+            <button type="submit">Play Again</button>
+        </form>
+    {% endif %}
+
+    <a href="{{ url_for('main') }}">Return Home</a>
+</body>
+</html>

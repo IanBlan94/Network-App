@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wildcard Mask</title>
+</head>
+<body>
+    <h1>Wildcard Mask Questions</h1>
+
+    <p>Random Question: <strong> {{question}} </strong></p>
+
+    <form method='POST'>
+        <label for="user_guess"> Enter the correct answer: </label>
+        <input type="text" id="user_guess" name="user_guess" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if result %}
+        <p> {{ result }}</p>
+        {% if correct %}
+            <p>{{correct}}</p>
+        {% endif %}
+        <form method="GET" action="{{url_for('subnet_quiz_route')}}">
+            <button type="submit">Try Another Question?</button>
+        </form>
+    {% endif %}
+
+    <a href="{{ url_for('main') }}">Return Home</a>
+
+</body>
+</html>

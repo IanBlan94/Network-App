@@ -8,9 +8,8 @@ Created on Thu Sep 19 09:38:05 2024
 #Binary-Decimal Conversion Game
 
 import random
-import pandas as pd
-from tabulate import tabulate
-from wildcard_mask import subnet_quiz
+import pandas as pd # type: ignore
+from wildcard_mask import subnet_quiz   
 
 # Initialize DataFrames to store guesses
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
@@ -19,8 +18,16 @@ binary_guess = pd.DataFrame(columns=['Random Decimal', 'Correct Binary', 'User G
 def display_bit_representation(binary_str):
     headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
     binary_values = list(binary_str)
-    table = [headers, binary_values]
-    print(tabulate(table, headers="firstrow", tablefmt="grid"))
+
+    # Print the headers with spacing
+    header_row = " | ".join(f"{header:<3}" for header in headers)
+    print(header_row)
+    print("-" * len(header_row))
+
+    # Print the binary values aligned with headers and spaced
+    value_row = " | ".join(f"{value:<3}" for value in binary_values)
+    print(value_row)
+    return headers, binary_values
 
 def binary_to_decimal():
     while True:
@@ -31,7 +38,7 @@ def binary_to_decimal():
         
         #Displays a binary table to reference 
         print("\nBit representation:")
-        display_bit_representation("00000000")
+        display_bit_representation(f"{random_binary}")
         
         print(f"\nRandom binary number: {random_binary}")
         user_guess = input("Enter the decimal value for this binary number: ")
@@ -95,6 +102,7 @@ def decimal_to_binary():
                 break
         except ValueError:
             print("Invalid input. Please enter a number.")
+
 
 
 def main_menu():
