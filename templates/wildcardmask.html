@@ -10,11 +10,13 @@
 
     <p>Random Question: <strong> {{question}} </strong></p>
 
-    <form method='POST'>
-        <label for="user_guess"> Enter the correct answer: </label>
-        <input type="text" id="user_guess" name="user_guess" required>
-        <button type="submit">Submit</button>
-    </form>
+    {% if not result %}
+        <form method='POST'>
+            <label for="user_guess"> Enter the correct answer: </label>
+            <input type="text" id="user_guess" name="user_guess" required>
+            <button type="submit">Submit</button>
+        </form>
+    {% endif %}
 
     {% if result %}
         <p> {{ result }}</p>
