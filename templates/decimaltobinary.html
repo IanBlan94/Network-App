@@ -30,20 +30,27 @@
    
 
     <!-- Form to capture user guess -->
-     {% if not result %}
+     {% if not game_over %}
         <form method="post">
             <label for="user_guess">Enter the Binary Value:</label>
             <input type="number" id="user_guess" name="user_guess" required>
             <button type="submit">Submit</button>
         </form>
+
+        <p>You have {{ 3 - session.counter }} tries left.</p>
+    {% endif %}
+    {% if game_over %}
+        <form method="GET" action="{{ url_for('decimal_to_binary') }}">
+            <button type="submit">Play Again</button>
+        </form>
+
+        
     {% endif %}
 
     <!-- Display result after form submission -->
     {% if result %}
         <p>{{ result }}</p>
-        <form method="GET" action="{{ url_for('decimal_to_binary') }}">
-            <button type="submit">Play Again</button>
-        </form>
+
     {% endif %}
 
     <a href="{{ url_for('main') }}">Return Home</a>

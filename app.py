@@ -26,6 +26,8 @@ def decimal_to_binary():
         random_binary = format(random_decimal, '08b')
         session['random_binary'] = random_binary  # Store binary value in session
         session['random_decimal'] = random_decimal  # Store decimal value in session
+        session['counter'] = 0
+        session['game_over'] = False
     else:
         # Retrieve the values from the session for POST (submission)
         random_binary = session.get('random_binary')
@@ -37,28 +39,32 @@ def decimal_to_binary():
     if request.method == 'POST':
         user_guess = request.form['user_guess']
         try:
+            
             # Ensure user's guess is in binary format
             if not all(bit in '01' for bit in user_guess) or len(user_guess) != 8:
                 raise ValueError("Invalid binary input.")
             
             # Validate the guess
             if user_guess == random_binary:
-                result = "Correct!"  
+                result = f"Conragulations! You've guessed the correct answer of {random_binary}" 
+                session['game_over'] = True
+            elif session['counter'] >= 2:
+                result = f"Sorry, you've used all 3 tries! The correct answer was {random_binary}."
+                session['game_over'] = True  # Set game over to True
             else:
-                result = f"Incorrect! The correct answer was {random_binary}."
+                result = f"Incorrect!. Please try again"
+            session['counter'] += 1
             
             # Log results to CSV
             binary_guess.loc[len(binary_guess)] = [random_binary, random_decimal, user_guess, result]
             binary_guess.to_csv('decimal_to_binary_results.csv', index=False)
 
-            # Clear session values to generate a new pair on the next GET request
-            session.pop('random_binary', None)
-            session.pop('random_decimal', None)
+            
         except ValueError:
             result = "Invalid input. Please enter an 8-bit binary number."
 
     # Render template with the random decimal and result message
-    return render_template('decimaltobinary.html', random_decimal=random_decimal, result=result, headers=headers)
+    return render_template('decimaltobinary.html', random_decimal=random_decimal, result=result, headers=headers, game_over=session['game_over'] )
 
 
 @app.route("/binary-to-decimal", methods=['GET', 'POST'])
@@ -68,10 +74,13 @@ def binary_to_decimal():
         random_decimal = random.randint(0, 255)
         random_binary = format(random_decimal, '08b')
         session['random_decimal'] = random_decimal  # Store decimal value in session
+        session['counter'] = 0
+        session['game_over'] = False
     else:
         # Retrieve the values from the session for POST (submission)
         random_decimal = session.get('random_decimal')
         random_binary = format(random_decimal, '08b')
+        
 
     result = None  # Default result for initial load
     correct = None
@@ -84,17 +93,23 @@ def binary_to_decimal():
             # Convert user's guess to an integer
             user_guess = int(user_guess)
             # Validate the guess
+            
             if user_guess == random_decimal:
-                result = "Correct!" 
+                result = f"Conragulations! You've guessed the correct answer of {random_decimal}" 
+                session['game_over'] = True
+            elif session['counter'] >= 2:
+                result = f"Sorry, you've used all 3 tries! The correct answer was {random_decimal}."
+                session['game_over'] = True  # Set game over to True
             else:
-                result = f"Incorrect!The correct answer was {random_decimal}."
+                result = f"Incorrect!. Please try again"
+            session['counter'] += 1
             decimal_guess.loc[len(decimal_guess)] = [random_binary, random_decimal, user_guess, result]
             decimal_guess.to_csv('binary_to_decimal_results.csv', index=False)
         except ValueError:
             result = "Invalid input. Please enter a valid decimal number."   
 
     # Render template with the random binary and result message
-    return render_template('binarytodecimal.html', random_binary=random_binary,correct=correct, result=result, headers=headers)
+    return render_template('binarytodecimal.html', random_binary=random_binary,correct=correct, result=result, headers=headers, game_over=session['game_over'])
   
     
 @app.route('/subnet-quiz', methods=['GET', 'POST'])
@@ -107,6 +122,8 @@ def subnet_quiz_route():
         # Store the question and answer in the session
         session['question'] = question_data['question']
         session['answer'] = question_data['answer']
+        session['counter'] = 0
+        session['game_over'] = False
         
     question = session.get('question')
     correct_answer = session.get('answer')
@@ -119,15 +136,19 @@ def subnet_quiz_route():
         try:
             # Check the user's answer
             if user_answer == correct_answer:
-                result = 'Correct!'
+                result = f"Conragulations! You've guessed the correct answer of {correct_answer}" 
+                session['game_over'] = True
+            elif session['counter'] >= 2:
+                result = f"Sorry, you've used all 3 tries! The correct answer was {correct_answer}."
+                session['game_over'] = True  # Set game over to True
             else:
-                result = 'Incorrect!'
-                correct = f"The correct answer was {correct_answer}."
+                result = f"Incorrect!. Please try again"
+            session['counter'] += 1
         except ValueError:
             result = "Invalid input. Please enter a valid decimal number."
 
     # Render template with result and correct answer information
-    return render_template('wildcardmask.html', result=result, correct=correct, question=question)
+    return render_template('wildcardmask.html', result=result, correct=correct, question=question, game_over=session['game_over'])
 
 if __name__ == '__main__':
     app.run(debug=True)

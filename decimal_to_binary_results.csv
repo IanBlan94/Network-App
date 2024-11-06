@@ -1,2 +1,6 @@
 Random Decimal,Correct Binary,User Guess,Result
-11000111,199,01101101,Incorrect! The correct answer was 11000111.
+00001010,10,00001010,Conragulations! You've guessed the correct answer of 00001010
+00110010,50,00110010,Conragulations! You've guessed the correct answer of 00110010
+10000010,130,00000000,Incorrect!. Please try again
+10000010,130,01010101,Incorrect!. Please try again
+10000010,130,01010101,"Sorry, you've used all 3 tries! The correct answer was 10000010."

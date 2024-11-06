@@ -10,11 +10,18 @@
 
     <p>Random Question: <strong> {{question}} </strong></p>
 
-    {% if not result %}
+    {% if not game_over %}
         <form method='POST'>
             <label for="user_guess"> Enter the correct answer: </label>
             <input type="text" id="user_guess" name="user_guess" required>
             <button type="submit">Submit</button>
+        </form>
+
+        <p>You have {{ 3 - session.counter }} tries left.</p>
+    {% endif %}
+    {% if game_over %}
+        <form method="GET" action="{{url_for('subnet_quiz_route')}}">
+            <button type="submit">Try Another Question?</button>
         </form>
     {% endif %}
 
@@ -23,9 +30,7 @@
         {% if correct %}
             <p>{{correct}}</p>
         {% endif %}
-        <form method="GET" action="{{url_for('subnet_quiz_route')}}">
-            <button type="submit">Try Another Question?</button>
-        </form>
+        
     {% endif %}
 
     <a href="{{ url_for('main') }}">Return Home</a>

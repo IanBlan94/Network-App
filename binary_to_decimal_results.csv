@@ -1,2 +1,5 @@
 Random Binary,Correct Decimal,User Guess,Result
-01111100,124,57,Incorrect!The correct answer was 124.
+01001111,79,2,Incorrect!. Please try again
+01001111,79,12,Incorrect!. Please try again
+01001111,79,15,"Sorry, you've used all 3 tries! The correct answer was 79."
+10010110,150,201,Incorrect!. Please try again
