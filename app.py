@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session # type: ignore
 import random
 import pandas as pd
-from M2Pro2_BlanchardIan import decimal_to_binary, binary_to_decimal, display_bit_representation
 from wildcard_mask import generate_question_from_csv, ask_question
 
 headers = ["128", "64", "32", "16", "8", "4", "2", "1"]

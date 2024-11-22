@@ -1,5 +1,4 @@
 Random Binary,Correct Decimal,User Guess,Result
-01001111,79,2,Incorrect!. Please try again
-01001111,79,12,Incorrect!. Please try again
-01001111,79,15,"Sorry, you've used all 3 tries! The correct answer was 79."
-10010110,150,201,Incorrect!. Please try again
+00110110,54,84,Incorrect!. Please try again
+00110110,54,89,Incorrect!. Please try again
+00110110,54,84,"Sorry, you've used all 3 tries! The correct answer was 54."
