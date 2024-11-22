@@ -17,7 +17,6 @@
 }
 .section .text{
     width: 50%;
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -40,7 +39,7 @@
     color: #000000;
     text-align: center;
     font-weight: 550;
-    margin-bottom: 32px;
+    margin-bottom: 5px;
     font-size: 19px;
 }
 
@@ -81,4 +80,37 @@
 .numlist li a:hover {
     color: rgb(181, 157, 19); 
     text-decoration: underline; 
+}
+.bin_dec_table {
+    width: 100%;
+    border-collapse: collapse; 
+    table-layout: fixed;
+
+}
+.bin_dec_table th {
+    border: 1px solid #000; /* Black border for the headers */
+    background-color: #f2f2f2; /* Light grey background */
+    padding: 8px;
+    text-align: center;
+    min-height: 40px;
+    min-width: 100px;
+}
+.bin_dec_table td {
+    border: 1px solid #000; /* Black border for the data cells */
+    padding: 8px;
+    text-align: center;
+    min-height: 40px;
+    min-width: 100px;
+}
+.bin_dec_table tr {
+    min-height: 40px; 
+}
+.question  {
+    padding:0%
+}
+.question p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    text-align: left;
+    padding: 5px;
 }

@@ -1,61 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Binary To Decimal</title>
+    <title>NetQuizzer</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
+    <!-- links for reference -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 
-    <style>
-        table { border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 10px; text-align: center; border: 1px solid black; }
-    </style>
 </head>
 <body>
-    <h1>Binary to Decimal Conversion</h1>
-        
-    <table>
-        <tr>
-            <!-- Display headers -->
-            {% for header in headers %}
-                <th>{{ header }}</th>
-            {% endfor %}
-        </tr>
+    <!-- header for page -->
+    <header>
+        <div class="header">
+            <div class="header-container">
+                <div class="left-bar">
+                    <div class="logo">
+                        <a href="{{ url_for('main') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
+                            <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
+                            <!-- input for classful address analysis later -->
+                            <li><a >Classful Address Analysis</a></li>
+                            <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
 
-    </table>
+    <!-- main body elements -->
+    <main>
+        <div class="main-container">
+            <section class="first section">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/presenting_trojan.png') }}" alt="presenting trojan">
+                </div>
+                <div class="text">
+                    <h1>Binary To Decimal Challenge</h1>
+                    <table class="bin_dec_table">
+                        <thead>
+                            <tr>
+                                <th scope="col">128</th>
+                                <th scope="col">64</th>
+                                <th scope="col">32</th>
+                                <th scope="col">8</th>
+                                <th scope="col">4</th>
+                                <th scope="col">2</th>
+                                <th scope="col">1</th>
+                                <th scope="col">0</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                                <th scope="col"></th>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="question">
+                        <!-- Display the random binary number generated in the backend -->
+                        <p>Convert this binary number to decimal: {{ random_binary }}</p>
+                    </div>
+                    <div class="userValue">
+                        <!-- Form to capture user guess -->
+                        {% if not game_over %}
+                            <form method="post">
+                                <label for="user_guess">Enter the Decimal Value:</label>
+                                <input type="number" id="user_guess" name="user_guess" required>
+                                <button type="submit">Submit</button>
+                            </form>
+                            <p>You have <span style="color: red;">{{ 3 - session.counter }}</span> tries left.</p>
+                        {% endif %}
+                        {% if game_over %}
+                            <form method="GET" action="{{ url_for('binary_to_decimal') }}">
+                                <button type="submit">Play Again</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                    <div class="answer">
+                        <!-- Display result after form submission -->
+                        {% if result %}
+                        <p>{{ result }}</p>
+                        {% if correct %}
+                            <p>{{correct}}</p>
+                        {% endif %}
 
-    <!-- Display the random binary number generated in the backend -->
-    <p>Binary Number: <strong>{{ random_binary }}</strong></p>
-        
-   
-
-    <!-- Form to capture user guess -->
-    {% if not game_over %}
-        <form method="post">
-            <label for="user_guess">Enter the Decimal Value:</label>
-            <input type="number" id="user_guess" name="user_guess" required>
-            <button type="submit">Submit</button>
-        </form>
-
-        <p>You have {{ 3 - session.counter }} tries left.</p>
-
-    {% endif %}
-    {% if game_over %}
-        <form method="GET" action="{{ url_for('binary_to_decimal') }}">
-            <button type="submit">Play Again</button>
-        </form>
-    {% endif %}
-    
-
-    <!-- Display result after form submission -->
-    {% if result %}
-        <p>{{ result }}</p>
-        {% if correct %}
-            <p>{{correct}}</p>
-        {% endif %}
-        
-    {% endif %}
-
-    <a href="{{ url_for('main') }}">Return Home</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
 </body>
 </html>
+
+
