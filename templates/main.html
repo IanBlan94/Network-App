@@ -2,16 +2,60 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Networking Tester</title>
+    <title>NetQuizzer</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
+    <!-- links for reference -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
 </head>
 <body>
-    <h1>This is a network tester</h1></body><br>
-
-    <a href = "{{url_for('binary_to_decimal')}}">Binary to Decimal</a>
-    <a href = "{{url_for('decimal_to_binary')}}">Decimal to Binary</a>
-    <a href = "{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a>
-
-
+    <!-- header for page -->
+    <header>
+        <div class="header">
+            <div class="header-container">
+                <div class="left-bar">
+                    <div class="logo">
+                        <a href="main.html"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
+                            <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
+                            <!-- input for classful address analysis later -->
+                            <li><a >Classful Address Analysis</a></li>
+                            <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- main body elements -->
+    <main>
+        <div class="main-container">
+            <section class="first section">
+                <div class="image">
+                    <img src="{{ url_for('static', filename='images/standing_trojan.png') }}" alt="standing trojan">
+                </div>
+                <div class="text">
+                    <h1>Welcome to the NetQuizzer!</h1>
+                    <ul class="dotlist">
+                        <li>Select from the header – It’s your quick-access key to get started right away.</li>
+                        <li>OR Pick an option from the menu – Explore all the exciting possibilities we’ve prepared for you!</li>
+                        <ol class="numlist">
+                            <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
+                            <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
+                            <li><a >Classful Address Analysis</a></li>
+                            <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
+                        </ol>
+                    </ul>
+                </div>
+            </section>
+        </div>
+    </main>
+    </main>
 </body>
 </html>
