@@ -114,3 +114,40 @@
     text-align: left;
     padding: 5px;
 }
+.userValue {
+    display: flex;
+    gap: 10px; /* Spacing between buttons */
+    justify-content: center; /* Center buttons horizontally */
+    margin-top: 20px; /* Add some space above the buttons */
+}
+.userValue button{
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: transform 0.2s, background-color 0.2s;
+}
+.submitBtn{
+    background-color: #4CAF50; 
+    color: white;
+    border-radius: 5px; 
+}
+.playBtn{
+    background-color: #4CAF50; 
+    color: white;
+    border-radius: 5px; 
+}
+.playBtn:hover{
+    background-color: #45a049;
+    transform: scale(1.05);
+}
+.homeBtn{
+    background-color: #008CBA; 
+    color: white;
+    border-radius: 5px; 
+}
+.homeBtn:hover{
+    background-color: #007BB5;
+    transform: scale(1.05);
+}

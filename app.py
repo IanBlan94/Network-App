@@ -45,7 +45,7 @@ def decimal_to_binary():
             
             # Validate the guess
             if user_guess == random_binary:
-                result = f"Conragulations! You've guessed the correct answer of {random_binary}" 
+                result = f"Congratulations! You've guessed the correct answer of {random_binary}" 
                 session['game_over'] = True
             elif session['counter'] >= 2:
                 result = f"Sorry, you've used all 3 tries! The correct answer was {random_binary}."
@@ -63,7 +63,11 @@ def decimal_to_binary():
             result = "Invalid input. Please enter an 8-bit binary number."
 
     # Render template with the random decimal and result message
-    return render_template('decimaltobinary.html', random_decimal=random_decimal, result=result, headers=headers, game_over=session['game_over'] )
+    return render_template('decimaltobinary.html', 
+                           random_decimal=random_decimal, 
+                           random_binary=session.get('random_binary'),
+                           result=result, 
+                           headers=headers, game_over=session['game_over'] )
 
 
 @app.route("/binary-to-decimal", methods=['GET', 'POST'])
@@ -94,7 +98,7 @@ def binary_to_decimal():
             # Validate the guess
             
             if user_guess == random_decimal:
-                result = f"Conragulations! You've guessed the correct answer of {random_decimal}" 
+                result = f"Congratulations! You've guessed the correct answer of {random_decimal}" 
                 session['game_over'] = True
             elif session['counter'] >= 2:
                 result = f"Sorry, you've used all 3 tries! The correct answer was {random_decimal}."
@@ -106,9 +110,16 @@ def binary_to_decimal():
             decimal_guess.to_csv('binary_to_decimal_results.csv', index=False)
         except ValueError:
             result = "Invalid input. Please enter a valid decimal number."   
-
+    session['random_decimal'] = '{:08b}'.format(random_decimal)
+    
     # Render template with the random binary and result message
-    return render_template('binarytodecimal.html', random_binary=random_binary,correct=correct, result=result, headers=headers, game_over=session['game_over'])
+    return render_template('binarytodecimal.html', 
+                           random_binary=random_binary,
+                           random_decimal=session.get('random_decimal'),
+                           correct=correct, 
+                           result=result, 
+                           headers=headers, 
+                           game_over=session['game_over'])
   
     
 @app.route('/subnet-quiz', methods=['GET', 'POST'])
