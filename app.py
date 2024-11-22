@@ -82,9 +82,9 @@ def binary_to_decimal():
     else:
         # Retrieve the values from the session for POST (submission)
         random_decimal = session.get('random_decimal')
-        random_binary = format(random_decimal, '08b')
         
-
+        
+    random_binary = format(random_decimal, '08b')
     result = None  # Default result for initial load
     correct = None
     
@@ -110,7 +110,7 @@ def binary_to_decimal():
             decimal_guess.to_csv('binary_to_decimal_results.csv', index=False)
         except ValueError:
             result = "Invalid input. Please enter a valid decimal number."   
-    session['random_decimal'] = '{:08b}'.format(random_decimal)
+    
     
     # Render template with the random binary and result message
     return render_template('binarytodecimal.html', 

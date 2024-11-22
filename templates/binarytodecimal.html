@@ -60,9 +60,9 @@
                             <tr>
                                 <!-- decimal table, auto binary number input-->
                                 {% if game_over %}
-                            {% for bit in random_decimal %}
-                                <td>{{ bit }}</td>
-                            {% endfor %}
+                                {% for bit in random_binary %}
+                                    <td>{{ bit }}</td>
+                                {% endfor %}
                             {% else %}
                                 {% for _ in range(8) %}
                                     <td>?</td>
