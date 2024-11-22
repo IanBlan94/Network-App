@@ -146,7 +146,7 @@ def subnet_quiz_route():
         try:
             # Check the user's answer
             if user_answer == correct_answer:
-                result = f"Conragulations! You've guessed the correct answer of {correct_answer}" 
+                result = f"Congratulations! You've guessed the correct answer of {correct_answer}" 
                 session['game_over'] = True
             elif session['counter'] >= 2:
                 result = f"Sorry, you've used all 3 tries! The correct answer was {correct_answer}."
@@ -159,6 +159,77 @@ def subnet_quiz_route():
 
     # Render template with result and correct answer information
     return render_template('wildcardmask.html', result=result, correct=correct, question=question, game_over=session['game_over'])
+
+# classful address analysis option
+@app.route("/classful_address_analysis", methods=["GET", "POST"])
+def classful_address_analysis():
+    # Generate a new question if it's a GET request or no session data exists
+    if request.method == 'GET' or 'question' not in session:
+        ip, cidr_prefix = generate_random_subnet()
+        answers = calculate_answers(ip, cidr_prefix)
+
+        # Prepare questions and select one randomly
+        questions = {
+            f"Enter Address Class and leading Bit Pattern (e.g., 'A / 0') for {ip}/{cidr_prefix}": answers["Address Class and Leading Bit Pattern"],
+            f"What is the prefix Length for {ip}/{cidr_prefix}?": answers["Prefix Length"],
+            f"What is the host address in binary for {ip}/{cidr_prefix}?": answers["Host Address in Binary"],
+            f"Enter network bits in binary for {ip}/{cidr_prefix}": answers["Network Bits in Binary"],
+            f"How many Host bits are in {ip}/{cidr_prefix}?": answers["Number of Host Bits"],
+            f"What is the Subnet Mask for {ip}/{cidr_prefix}?": answers["Subnet Mask"],
+        }
+        question, correct_answer = random.choice(list(questions.items()))
+
+        # Store data in the session
+        session['question'] = question
+        session['correct_answer'] = correct_answer
+        session['ip'] = ip
+        session['cidr_prefix'] = cidr_prefix
+        session['game_over'] = False
+
+    else:
+        # Retrieve values from session for POST (submission)
+        question = session.get('question')
+        correct_answer = session.get('correct_answer')
+
+    result = None  # Default result for initial load
+
+    # Process the form submission (POST request)
+    if request.method == 'POST':
+        user_answer = request.form.get('user_answer', '').strip()
+
+        try:
+            # Validate and format the answer based on question type
+            if "Address Class and leading Bit Pattern" in question:
+                is_valid, formatted_answer = format_address_class_pattern(user_answer)
+                if not is_valid:
+                    raise ValueError("Error: Invalid format. Use 'A / 0' style.")
+                user_answer = formatted_answer
+
+            elif "Subnet Mask" in question:
+                if not validate_subnet_mask(user_answer):
+                    raise ValueError("Error: Invalid subnet mask format (e.g., '255.255.0.0').")
+
+            # Compare user input to the correct answer
+            if user_answer == correct_answer:
+                result = f"Congratulations! You've guessed the correct answer of {correct_answer}"
+                session['game_over'] = True
+            else:
+                result = f"Incorrect! The correct answer is: {correct_answer}"
+                session['game_over'] = True  # Game ends after one question
+
+            # Log the results to a CSV file
+            log_result(question, correct_answer, user_answer)
+
+        except ValueError as e:
+            result = str(e)
+
+    # Render template with the question and result message
+    return render_template('classful_address_analysis.html',
+                           question=session.get('question'),
+                           result=result,
+                           ip=session.get('ip'),
+                           cidr_prefix=session.get('cidr_prefix'),
+                           game_over=session.get('game_over'),)
 
 if __name__ == '__main__':
     app.run(debug=True)
