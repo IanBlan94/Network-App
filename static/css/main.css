@@ -151,3 +151,26 @@
     background-color: #007BB5;
     transform: scale(1.05);
 }
+
+.subnet-container {
+    margin: 0 auto; /* Center the container horizontally */
+    text-align: center; /* Center-align text within the container */
+    width: 100%; /* Ensure the container spans the full width */
+}
+.question {
+    margin-bottom: 10px;
+    padding: 5px;
+    outline: 2px black solid;
+    border-radius: 10px;
+}
+.feedback {
+    margin-left: 10px;
+}
+.correct {
+    color: green;
+    font-weight: bold;
+}
+.incorrect {
+    color: red;
+    font-weight: bold;
+}

@@ -3,37 +3,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wildcard Mask</title>
+    <title>Wildcard Mask Quiz</title>
+
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
+    <!-- links for reference -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <div class="header">
+        <div class="header-container">
+            <div class="left-bar">
+                <div class="logo">
+                    <a href="{{ url_for('main') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
+                        <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
+                        <!-- input for classful address analysis later -->
+                        <li><a >Classful Address Analysis</a></li>
+                        <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
 </head>
 <body>
-    <h1>Wildcard Mask Questions</h1>
-
-    <p>Random Question: <strong> {{question}} </strong></p>
-
-    {% if not game_over %}
-        <form method='POST'>
-            <label for="user_guess"> Enter the correct answer: </label>
-            <input type="text" id="user_guess" name="user_guess" required>
-            <button type="submit">Submit</button>
-        </form>
-
-        <p>You have {{ 3 - session.counter }} tries left.</p>
-    {% endif %}
-    {% if game_over %}
-        <form method="GET" action="{{url_for('subnet_quiz_route')}}">
-            <button type="submit">Try Another Question?</button>
-        </form>
-    {% endif %}
-
-    {% if result %}
-        <p> {{ result }}</p>
-        {% if correct %}
-            <p>{{correct}}</p>
-        {% endif %}
-        
-    {% endif %}
-
-    <a href="{{ url_for('main') }}">Return Home</a>
-
+    <div class="subnet-container">
+        <h1 class="subnet-header">Subnet Quiz</h1>
+        <div class="userValue">
+            <form method="POST">
+                {% for question in questions %}
+                <div class="question">
+                    <label>{{ question.question }}</label><br>
+                    <input type="text" name="{{ question.question }}" value="">
+                    {% if results %}
+                        {% for result in results %}
+                            {% if result.question == question.question %}
+                            <span class="feedback {% if result.correct %}correct{% else %}incorrect{% endif %}">
+                                {{ '✓ Correct' if result.correct else '✗ Incorrect' }} 
+                                (Correct Answer: {{ result.correct_answer }})
+                            </span>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+                {% if not results %}
+                <form>
+                    <button type="submit" class="submitBtn">Check All</button>
+                <a href="{{ url_for('main') }}">Return to Main Menu</a>
+                </form>
+                
+                {% else %}
+                    <form method="GET"> 
+                        <button class="submitBtn"><a  href="{{ url_for('subnet_quiz_route') }}">New Questions</a></button>
+                        <a href="{{ url_for('main') }}">Return to Main Menu</a>
+                    </form>
+                {% endif %}
+            </form>
+            <div class="image">
+                <img src="{{ url_for('static', filename='images/sword_trojan.png') }}" alt="presenting trojan">
+            </div>
+            
+        </div>
+    </div>
 </body>
 </html>
