@@ -1,8 +1,3 @@
- <!-- IAN PLEASE FIX THIS AND MAKE IT PRETTY -->
-   <!-- IT NEEDS A PLAY AGAIN BUTTON -->
-     <!-- ALSO NEEDS FORMATTING      11/23/2024  AMY SANTJER -->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,44 +34,27 @@
             </div>
         </div>
     </header>
-
     <!-- main body elements -->
     <main>
         <div class="main-container">
             <section class="first section">
                 <div class="image">
-                    <img src="{{ url_for('static', filename='images/ax_trojan.png') }}" alt="ax trojan">
+                    <img src="{{ url_for('static', filename='images/standing_trojan.png') }}" alt="standing trojan">
                 </div>
                 <div class="text">
-                    <h1>Classful Address Analysis</h1>
-                    
-                    <form method="POST">
-                        <div class="question">
-                            <p>{{ question }}</p>
-                        </div>
-            
-                        <!-- Loop through the answers, dynamically creating inputs for each one -->
-                        {% for key, value in answers.items() %}
-                            <label for="{{ key }}">{{ key }}</label>
-                            <input type="text" name="user_answer" id="{{ key }}" class="answer-input" placeholder="Enter your answer">
-                        {% endfor %}
-                        
-                        <button type="submit" class="submitBtn">Submit</button>
-                    </form>
-
-                    <!-- Show the result of the user's guess -->
-                    {% if result %}
-                        <div class="result">
-                            {% for r in result %}
-                                <p class="{{ 'correct' if 'Correct' in r else 'incorrect' }}">{{ r }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
+                    <h1>Quick Reference Guide</h1>
+                    <ul class="dotlist">
+                        <li>Looks like you need some help!</li>
+                        <li>Select from options below</li>
+                        <ol class="numlist">
+                            <li><a href="">IPv4 Address Analysis Information</a></li>
+                            <li><a href="">Subnetting Basics</a></li>
+                            <li><a href="">Network Cheatsheets</a></li>
+                        </ol>
+                    </ul>
                 </div>
             </section>
         </div>
     </main>
 </body>
 </html>
-
-

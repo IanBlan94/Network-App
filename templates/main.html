@@ -24,9 +24,10 @@
                         <ul>
                             <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
                             <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
-                            <!-- input for classful address analysis later -->
-                            <li><a >Classful Address Analysis</a></li>
+                            <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
                             <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
+                            <!-- need to make an html for a cheat sheet/info panel summarizing networking. 11/23/24 Amy S.-->
+                            <li><a href="{{ url_for('main') }}">Quick Reference Guide</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -43,12 +44,13 @@
                 <div class="text">
                     <h1>Welcome to the NetQuizzer!</h1>
                     <ul class="dotlist">
+                        <li>This app isn’t just about quizzes—it’s your ultimate study buddy for cracking networking skills! Learn, practice, and conquer everything from Native Address Classes to Subnet Address Maps</li>
                         <li>Select from the header – It’s your quick-access key to get started right away.</li>
                         <li>OR Pick an option from the menu – Explore all the exciting possibilities we’ve prepared for you!</li>
                         <ol class="numlist">
                             <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
                             <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
-                            <li><a >Classful Address Analysis</a></li>
+                            <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
                             <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
                         </ol>
                     </ul>

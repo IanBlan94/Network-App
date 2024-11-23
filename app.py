@@ -2,12 +2,13 @@ from flask import Flask, render_template, request, redirect, url_for, session # 
 import random
 import pandas as pd
 from wildcard_mask import prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask
-
+from classaddress import generate_random_classful_address, calculate_classful_analysis
 
 headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
 binary_guess = pd.DataFrame(columns=['Random Decimal', 'Correct Binary', 'User Guess', 'Result'])
 wildcardmak_results = pd.DataFrame(columns=['Random Question, Correct Answer', 'User Guess', 'Result'])
+## NEEDS CSV FILE CREATION FOR CLASSFUL ADDRESS - AMY SANTJER ##
 
 app= Flask(__name__)
 app.secret_key = 'theonekey'
@@ -182,76 +183,44 @@ def subnet_quiz_route():
     return render_template('wildcardmask.html', questions=session.get('questions_and_answers', []), results=session.get('results'))
 
 
-# classful address analysis option
-@app.route("/classful_address_analysis", methods=["GET", "POST"])
-def classful_address_analysis():
-    # Generate a new question if it's a GET request or no session data exists
-    if request.method == 'GET' or 'question' not in session:
-        ip, cidr_prefix = generate_random_subnet()
-        answers = calculate_answers(ip, cidr_prefix)
+@app.route("/classful_quiz", methods=["GET", "POST"])
+def classful_quiz():
+    if request.method == "GET" or "question" not in session:
+        ip, default_mask, cidr_prefix = generate_random_classful_address()
+        answers = calculate_classful_analysis(ip, default_mask, cidr_prefix)
 
-        # Prepare questions and select one randomly
-        questions = {
-            f"Enter Address Class and leading Bit Pattern (e.g., 'A / 0') for {ip}/{cidr_prefix}": answers["Address Class and Leading Bit Pattern"],
-            f"What is the prefix Length for {ip}/{cidr_prefix}?": answers["Prefix Length"],
-            f"What is the host address in binary for {ip}/{cidr_prefix}?": answers["Host Address in Binary"],
-            f"Enter network bits in binary for {ip}/{cidr_prefix}": answers["Network Bits in Binary"],
-            f"How many Host bits are in {ip}/{cidr_prefix}?": answers["Number of Host Bits"],
-            f"What is the Subnet Mask for {ip}/{cidr_prefix}?": answers["Subnet Mask"],
-        }
-        question, correct_answer = random.choice(list(questions.items()))
+        # -----  IAN USE THIS FOR YOUR QUESTION FOR OPTION 3 ----- #
+        question = f"Given the IP address {ip}/{cidr_prefix}, answer the following:"
 
-        # Store data in the session
-        session['question'] = question
-        session['correct_answer'] = correct_answer
-        session['ip'] = ip
-        session['cidr_prefix'] = cidr_prefix
-        session['game_over'] = False
+        session["ip"] = ip
+        session["cidr_prefix"] = cidr_prefix
+        session["answers"] = answers
+        session["question"] = question
 
+        result = None  
     else:
-        # Retrieve values from session for POST (submission)
-        question = session.get('question')
-        correct_answer = session.get('correct_answer')
 
-    result = None  # Default result for initial load
+        user_answers = {
+            key: request.form.get(key, "").strip() for key in session["answers"].keys()
+        }
+        correct_answers = session["answers"]
 
-    # Process the form submission (POST request)
-    if request.method == 'POST':
-        user_answer = request.form.get('user_answer', '').strip()
-
-        try:
-            # Validate and format the answer based on question type
-            if "Address Class and leading Bit Pattern" in question:
-                is_valid, formatted_answer = format_address_class_pattern(user_answer)
-                if not is_valid:
-                    raise ValueError("Error: Invalid format. Use 'A / 0' style.")
-                user_answer = formatted_answer
-
-            elif "Subnet Mask" in question:
-                if not validate_subnet_mask(user_answer):
-                    raise ValueError("Error: Invalid subnet mask format (e.g., '255.255.0.0').")
-
-            # Compare user input to the correct answer
+        # Validating answers from user input
+        result = []
+        for key, correct_answer in correct_answers.items():
+            user_answer = user_answers.get(key, "")
             if user_answer == correct_answer:
-                result = f"Congratulations! You've guessed the correct answer of {correct_answer}"
-                session['game_over'] = True
+                result.append(f"{key}: Correct!")
             else:
-                result = f"Incorrect! The correct answer is: {correct_answer}"
-                session['game_over'] = True  # Game ends after one question
+                result.append(f"{key}: Incorrect! Correct answer is {correct_answer}.")
 
-            # Log the results to a CSV file
-            log_result(question, correct_answer, user_answer)
-
-        except ValueError as e:
-            result = str(e)
-
-    # Render template with the question and result message
-    return render_template('classful_address_analysis.html',
-                           question=session.get('question'),
+    return render_template("classfuladdress.html",
+                           question=session.get("question"),
+                           ip=session.get("ip"),
+                           cidr_prefix=session.get("cidr_prefix"),
+                           answers=session.get("answers"),
                            result=result,
-                           ip=session.get('ip'),
-                           cidr_prefix=session.get('cidr_prefix'),
-                           game_over=session.get('game_over'),)
+    )
 
 if __name__ == '__main__':
     app.run(debug=True)
