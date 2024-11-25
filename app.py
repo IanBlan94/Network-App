@@ -185,11 +185,10 @@ def subnet_quiz_route():
 
 @app.route("/classful_quiz", methods=["GET", "POST"])
 def classful_quiz():
-    if request.method == "GET" or "question" not in session:
+    if request.method == "GET" or session.get("question") is None:
         ip, default_mask, cidr_prefix = generate_random_classful_address()
         answers = calculate_classful_analysis(ip, default_mask, cidr_prefix)
 
-        # -----  IAN USE THIS FOR YOUR QUESTION FOR OPTION 3 ----- #
         question = f"Given the IP address {ip}/{cidr_prefix}, answer the following:"
 
         session["ip"] = ip
@@ -197,30 +196,30 @@ def classful_quiz():
         session["answers"] = answers
         session["question"] = question
 
-        result = None  
+        result = None  # No results yet for a new quiz
     else:
-
         user_answers = {
             key: request.form.get(key, "").strip() for key in session["answers"].keys()
         }
         correct_answers = session["answers"]
 
-        # Validating answers from user input
+        # Validate user answers
         result = []
         for key, correct_answer in correct_answers.items():
             user_answer = user_answers.get(key, "")
-            if user_answer == correct_answer:
-                result.append(f"{key}: Correct!")
-            else:
-                result.append(f"{key}: Incorrect! Correct answer is {correct_answer}.")
+            result.append({
+                "question": key,
+                "user_answer": user_answer,
+                "correct_answer": correct_answer,
+                "correct": user_answer == correct_answer
+            })
 
     return render_template("classfuladdress.html",
-                           question=session.get("question"),
-                           ip=session.get("ip"),
-                           cidr_prefix=session.get("cidr_prefix"),
-                           answers=session.get("answers"),
-                           result=result,
-    )
+                           question=session["question"],
+                           answers=session["answers"],
+                           results=result)
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

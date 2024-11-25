@@ -42,38 +42,44 @@
 
     <!-- main body elements -->
     <main>
-        <div class="main-container">
-            <section class="first section">
+        <div class="subnet-container">
+            <h1>Classful Address Analysis</h1>
+            <div class="userValue">
                 <div class="image">
                     <img src="{{ url_for('static', filename='images/ax_trojan.png') }}" alt="ax trojan">
                 </div>
-                <div class="text">
-                    <h1>Classful Address Analysis</h1>
-                    
-                    <form method="POST">
-                        <div class="question">
-                            <p>{{ question }}</p>
-                        </div>
-            
-                        <!-- Loop through the answers, dynamically creating inputs for each one -->
-                        {% for key, value in answers.items() %}
-                            <label for="{{ key }}">{{ key }}</label>
-                            <input type="text" name="user_answer" id="{{ key }}" class="answer-input" placeholder="Enter your answer">
-                        {% endfor %}
-                        
-                        <button type="submit" class="submitBtn">Submit</button>
-                    </form>
-
-                    <!-- Show the result of the user's guess -->
-                    {% if result %}
-                        <div class="result">
-                            {% for r in result %}
-                                <p class="{{ 'correct' if 'Correct' in r else 'incorrect' }}">{{ r }}</p>
+                <form method="POST">
+                    <p>{{question}}</p>
+                    <!-- Loop through the answers -->
+                    {% for key, correct_answer in answers.items() %}
+                    <div class="question">
+                        <label for="{{ key }}">{{ key }}</label><br>
+                        <input type="text" name="{{ key }}" id="{{ key }}" placeholder="Enter your answer">
+                        {% if results %}
+                            {% for result in results %}
+                                {% if result.question == key %}
+                                    <p class="feedback {{ 'correct' if result.correct else 'incorrect' }}">
+                                        {{ '✓ Correct' if result.correct else '✗ Incorrect' }}
+                                        (Correct Answer: {{ result.correct_answer }})
+                                    </p>
+                                {% endif %}
                             {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
-            </section>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                    {% if not results %}
+                        <form>
+                            <button type="submit" class="submitBtn">Check All</button>
+                            <a href="{{ url_for('main') }}">Return to Main Menu</a>
+                        </form>
+                    {% else %}
+                        <form method="GET"> 
+                            <button class="submitBtn"><a  href="{{ url_for('classful_quiz') }}">New Questions</a></button>
+                            <a href="{{ url_for('main') }}">Return to Main Menu</a>
+                        </form>
+                {% endif %}
+                </form>    
+            </div>
         </div>
     </main>
 </body>
