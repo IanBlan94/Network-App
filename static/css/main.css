@@ -129,17 +129,17 @@
     transition: transform 0.2s, background-color 0.2s;
 }
 .submitBtn{
-    background-color: #4CAF50; 
+    background-color: #55c2da; 
     color: white;
     border-radius: 5px; 
 }
 .playBtn{
-    background-color: #4CAF50; 
+    background-color: #55c2da; 
     color: white;
     border-radius: 5px; 
 }
 .playBtn:hover{
-    background-color: #45a049;
+    background-color: #55c2da;
     transform: scale(1.05);
 }
 .homeBtn{

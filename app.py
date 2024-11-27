@@ -29,6 +29,7 @@ def decimal_to_binary():
         session['random_decimal'] = random_decimal  # Store decimal value in session
         session['counter'] = 0
         session['game_over'] = False
+        session['wrong_guesses'] = []
     else:
         # Retrieve the values from the session for POST (submission)
         random_binary = session.get('random_binary')
@@ -47,14 +48,18 @@ def decimal_to_binary():
             
             # Validate the guess
             if user_guess == random_binary:
-                result = f"Congratulations! You've guessed the correct answer of {random_binary}" 
+                result = f"Congratulations! You've gotten it correct!" 
                 session['game_over'] = True
-            elif session['counter'] >= 2:
-                result = f"Sorry, you've used all 3 tries! The correct answer was {random_binary}."
-                session['game_over'] = True  # Set game over to True
+                session['wrong_guesses'].clear
             else:
-                result = f"Incorrect!. Please try again"
-            session['counter'] += 1
+                session['wrong_guesses'].append(user_guess)  # Save wrong guess
+                if session['counter'] >= 2:
+                    result = f"Sorry, you've used all 3 tries! The correct answer was {random_binary}."
+                    session['game_over'] = True  # Set game over to True
+                    session['wrong_guesses'].clear
+                else:
+                    result = f"Incorrect!. Please try again"
+                session['counter'] += 1
             
             # Log results to CSV
             binary_guess.loc[len(binary_guess)] = [random_binary, random_decimal, user_guess, result]
@@ -69,7 +74,8 @@ def decimal_to_binary():
                            random_decimal=random_decimal, 
                            random_binary=session.get('random_binary'),
                            result=result, 
-                           headers=headers, game_over=session['game_over'] )
+                           headers=headers, game_over=session['game_over'],
+                           wrong_guesses=session.get('wrong_guesses', []))
 
 
 @app.route("/binary-to-decimal", methods=['GET', 'POST'])
@@ -81,6 +87,7 @@ def binary_to_decimal():
         session['random_decimal'] = random_decimal  # Store decimal value in session
         session['counter'] = 0
         session['game_over'] = False
+        session['wrong_guesses'] = []
     else:
         # Retrieve the values from the session for POST (submission)
         random_decimal = session.get('random_decimal')
@@ -100,14 +107,19 @@ def binary_to_decimal():
             # Validate the guess
             
             if user_guess == random_decimal:
-                result = f"Congratulations! You've guessed the correct answer of {random_decimal}" 
+                result = f"Congratulations! You've gotten it correct!" 
                 session['game_over'] = True
-            elif session['counter'] >= 2:
-                result = f"Sorry, you've used all 3 tries! The correct answer was {random_decimal}."
-                session['game_over'] = True  # Set game over to True
+                session['wrong_guesses'].clear
             else:
-                result = f"Incorrect!. Please try again"
+                session['wrong_guesses'].append(user_guess)
+                if session['counter'] >= 2:
+                    result = f"Sorry, you've used all 3 tries! The correct answer was {random_decimal}."
+                    session['game_over'] = True  # Set game over to True
+                    session['wrong_guesses'].clear
+                else:
+                    result = f"Incorrect!. Please try again"
             session['counter'] += 1
+            
             decimal_guess.loc[len(decimal_guess)] = [random_binary, random_decimal, user_guess, result]
             decimal_guess.to_csv('binary_to_decimal_results.csv', index=False)
         except ValueError:
@@ -121,7 +133,8 @@ def binary_to_decimal():
                            correct=correct, 
                            result=result, 
                            headers=headers, 
-                           game_over=session['game_over'])
+                           game_over=session['game_over'],
+                           wrong_guesses=session.get('wrong_guesses', []))
   
     
 @app.route('/subnet-quiz', methods=['GET', 'POST'])

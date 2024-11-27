@@ -74,17 +74,26 @@
                     </table>
                     <div class="question">
                         <!-- Display the random binary number generated in the backend -->
-                        <p>Convert this binary number to decimal: {{ random_binary }}</p>
+                        <p>Convert To Decimal: {{ random_binary }}</p>
                     </div>
                     <div class="userValue">
                         <!-- Form to capture user guess -->
                         {% if not game_over %}
                             <form method="post">
+                                {% if wrong_guesses %}
+                                    <p>Wrong Guesses:</p>
+                                    <ul>
+                                    {% for guess in wrong_guesses %}
+                                        <li>{{ guess }}</li>
+                                    {% endfor %}
+                                    </ul>
+                                {% endif %}
                                 <label for="user_guess">Enter the Decimal Value:</label>
                                 <input type="number" id="user_guess" name="user_guess" required>
                                 <button type="submit" class="submitBtn">Submit</button>
+                                <p>Attempts Remaining: <span style="color: red;">{{ 3 - session.counter }}</span></p>
                             </form>
-                            <p>You have <span style="color: red;">{{ 3 - session.counter }}</span> tries left.</p>
+                           
                         {% endif %}
                         {% if game_over %}
                             <form method="GET" action="{{ url_for('binary_to_decimal') }}">
