@@ -127,8 +127,14 @@
     border: none;
     outline: none;
     transition: transform 0.2s, background-color 0.2s;
+    color: white;
 }
 .submitBtn{
+    background-color: #1E88E5; 
+    color: white;
+    border-radius: 5px; 
+}
+.submitBtn a{
     background-color: #1E88E5; 
     color: white;
     border-radius: 5px; 
@@ -150,6 +156,11 @@
 .homeBtn:hover{
     background-color: #A52DAD;
     transform: scale(1.05);
+}
+.alignBtns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 
 .subnet-container {

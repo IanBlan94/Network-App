@@ -52,23 +52,28 @@ def calculate_classful_analysis(ip, default_mask, cidr_prefix):
     # Convert the IP and CIDR prefix into a network object, to calculate laterrrr for subnet mask
     network = ipaddress.ip_network(f"{ip}/{cidr_prefix}", strict=False)
 
-    # Calculates the native address range (using the default mask)
-    native_network = ipaddress.ip_network(f"{ip}/{default_mask}", strict=False)
-    native_address_map = f"{native_network.network_address} - {native_network.broadcast_address}"
+    # Split the IP into octets
+    octets = ip.split('.')
 
-    # Calculate the subnet range (using the CIDR prefix)
-    subnet_address_map = f"{network.network_address} - {network.broadcast_address}"
-
-    # Subnet Mask (SNM, (e.g., 255.255.255.0)) and Wildcard Mask (WCM)
-    subnet_mask = str(network.netmask)
-    wildcard_mask = str(network.hostmask)
+    # Determine address class and native address map
+    first_octet = int(octets[0])
+    if 1 <= first_octet <= 126:  # Class A
+        leading_bit_pattern = "0"
+        native_address_map = f"{first_octet}.H.H.H"
+    elif 128 <= first_octet <= 191:  # Class B
+        leading_bit_pattern = "10"
+        native_address_map = f"{first_octet}.{octets[1]}.H.H"
+    elif 192 <= first_octet <= 223:  # Class C
+        leading_bit_pattern = "110"
+        native_address_map = f"{first_octet}.{octets[1]}.{octets[2]}.H"
+    else:
+        leading_bit_pattern = "Unknown"
+        native_address_map = "Invalid Address Class"
 
     return {
         "Native Address Class": network.network_address.exploded.split(".")[0],
         "Native Address Map": native_address_map,
-        "Subnet Address Map (SAM)": subnet_address_map,
-        "Subnet Mask (SNM)": subnet_mask,
-        "Wildcard Mask (WCM)": wildcard_mask
+        "Leading Bit Pattern": leading_bit_pattern,
+        "Subnet Mask (SNM)": str(network.netmask),
+        "Wildcard Mask (WCM)": str(network.hostmask)
     }
-
-

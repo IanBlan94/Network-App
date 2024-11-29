@@ -8,7 +8,7 @@ headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
 binary_guess = pd.DataFrame(columns=['Random Decimal', 'Correct Binary', 'User Guess', 'Result'])
 wildcardmak_results = pd.DataFrame(columns=['Random Question, Correct Answer', 'User Guess', 'Result'])
-classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Native Address Class', 'Native Address Map', 'Subnet Address Map', 'Subnet Mask', 'Wildcard Mask', 'User Answers', 'Correct Answers', 'Score'])
+classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Native Address Class', 'Native Address Map', 'Subnet Mask', 'Wildcard Mask', 'User Answers', 'Correct Answers', 'Score'])
 
 app= Flask(__name__)
 app.secret_key = 'theonekey'
@@ -239,7 +239,7 @@ def classful_quiz():
             'CIDR Prefix': session['cidr_prefix'],
             'Native Address Class': correct_answers.get('Native Address Class', ''),
             'Native Address Map': correct_answers.get('Native Address Map', ''),
-            'Subnet Address Map': correct_answers.get('Subnet Address Map (SAM)', ''),
+            'Leading Bit Pattern': correct_answers.get('Leading Bit Pattern', ''),
             'Subnet Mask': correct_answers.get('Subnet Mask (SNM)', ''),
             'Wildcard Mask': correct_answers.get('Wildcard Mask (WCM)', ''),
             'User Answers': str(user_answers),

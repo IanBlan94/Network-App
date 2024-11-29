@@ -68,12 +68,14 @@
                             </form>
                         </form>
                     {% else %}
-                        <form method="GET"> 
-                            <button class="submitBtn"><a  href="{{ url_for('classful_quiz') }}">New Challenge</a></button>
+                        <div class="alignBtns">
+                            <form method="GET"> 
+                                <button class="submitBtn" style="color: white;"><a  href="{{ url_for('classful_quiz') }}">New Challenge</a></button>
+                            </form>
                             <form method="GET" action="{{ url_for('main') }}">
                                 <button type="submit" class="homeBtn">Return Home</button>
                             </form>
-                        </form>
+                        </div>
                 {% endif %}
                 </form>    
             </div>
