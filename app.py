@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session # 
 import random
 import pandas as pd
 from wildcard_mask import prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask
-from classaddress import generate_random_classful_address, calculate_classful_analysis
+from classaddress import generate_random_classful_address, calculate_classful_analysis, validate_input 
 
 headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
@@ -198,7 +198,7 @@ def subnet_quiz_route():
 
 @app.route("/classful_quiz", methods=["GET", "POST"])
 def classful_quiz():
-    global classful_quiz_results  # Use the global DataFrame
+    global classful_quiz_results  
 
     if request.method == "GET" or session.get("question") is None:
         ip, default_mask, cidr_prefix = generate_random_classful_address()
@@ -211,7 +211,7 @@ def classful_quiz():
         session["answers"] = answers
         session["question"] = question
 
-        result = None  # No results yet for a new quiz
+        result = None  
     else:
         user_answers = {
             key: request.form.get(key, "").strip() for key in session["answers"].keys()
@@ -221,8 +221,20 @@ def classful_quiz():
         # Validate user answers
         result = []
         score = 0
+        validation_error = False
         for key, correct_answer in correct_answers.items():
             user_answer = user_answers.get(key, "")
+            # Check input validation
+            if not validate_input(key, user_answer):
+                validation_error = True
+                result.append({
+                    "question": key,
+                    "user_answer": user_answer,
+                    "correct_answer": correct_answer,
+                    "correct": False,
+                    "validation_error": True
+                })
+                continue
             is_correct = user_answer == correct_answer
             if is_correct:
                 score += 1
@@ -232,6 +244,14 @@ def classful_quiz():
                 "correct_answer": correct_answer,
                 "correct": is_correct
             })
+        
+        # If there's a validation error, prevent quiz submission
+        if validation_error:
+            return render_template("classfuladdress.html",
+                                   question=session["question"],
+                                   answers=session["answers"],
+                                   results=result,
+                                   validation_error=True)
 
         # Log the results to the CSV
         classful_quiz_results.loc[len(classful_quiz_results)] = {

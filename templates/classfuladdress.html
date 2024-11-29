@@ -47,14 +47,33 @@
                     {% for key, correct_answer in answers.items() %}
                     <div class="question">
                         <label for="{{ key }}">{{ key }}</label><br>
-                        <input type="text" name="{{ key }}" id="{{ key }}" placeholder="Enter your answer">
+                        <input 
+                            type="{% if key == 'Native Address Class' or key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
+                            name="{{ key }}"
+                            {% if key == "Native Address Class" %}
+                                placeholder="Enter an integer (0-255)"
+                                min="0"
+                                max="255"
+                            {% elif key == "Leading Bit Pattern" %}
+                                placeholder="Enter an integer"
+                            {% elif key == "Native Address Map" %}
+                                placeholder="Format: xxx.xxx.H.H"
+                            {% elif key == "Subnet Mask (SNM)" or key == "Wildcard Mask (WCM)" %}
+                                placeholder="Format: xxx.xxx.xxx.xxx"
+                            {% endif %}
+                            required
+                        >
                         {% if results %}
                             {% for result in results %}
                                 {% if result.question == key %}
-                                    <p class="feedback {{ 'correct' if result.correct else 'incorrect' }}">
-                                        {{ '✓ Correct' if result.correct else '✗ Incorrect' }}
-                                        (Correct Answer: {{ result.correct_answer }})
-                                    </p>
+                                <!--<p class="feedback {{ 'correct' if result.correct else 'incorrect' }}"> -->
+                                    {% if result.correct %}
+                                        <span style="color: #086555;">✓ Correct</span>
+                                    {% else %}
+                                        <span style="color: #D81B60;">✗ Incorrect</span>
+                                    {% endif %}
+                                    (Correct Answer: {{ result.correct_answer }})
+                                <!--    </p>-->
                                 {% endif %}
                             {% endfor %}
                         {% endif %}

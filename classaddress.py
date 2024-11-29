@@ -3,6 +3,7 @@ This file generates an classful address and calculates it based on certain quest
 """
 import random
 import ipaddress
+import re
 
 def generate_random_classful_address():
     """
@@ -77,3 +78,48 @@ def calculate_classful_analysis(ip, default_mask, cidr_prefix):
         "Subnet Mask (SNM)": str(network.netmask),
         "Wildcard Mask (WCM)": str(network.hostmask)
     }
+
+def validate_input(key, value):
+    """
+    Validate user input based on the question type
+
+    Args:
+        key:
+        value:
+
+    Returns:
+        bool: False
+    """
+    if key == "Native Address Class":
+        # Must be an integer between 0-255
+        try:
+            int_value = int(value)
+            return 0 <= int_value <= 255
+        except ValueError:
+            return False
+    
+    elif key == "Native Address Map":
+        # Must match format like 144.173.H.H or 10.H.H.H
+        return re.match(r'^\d+\.\d*[H]+\.\d*[H]+\.\d*[H]+$', value) is not None
+    
+    elif key == "Leading Bit Pattern":
+        # Must be an integer
+        try:
+            int_value = int(value)
+            return True
+        except ValueError:
+            return False
+    
+    elif key == "Subnet Address Map (SAM)":
+        # Must have IP address format with start and end addresses
+        return re.match(r'^\d+\.\d+\.\d+\.\d+ - \d+\.\d+\.\d+\.\d+$', value) is not None
+    
+    elif key == "Subnet Mask (SNM)":
+        # Must have IP address format with dots
+        return re.match(r'^\d+\.\d+\.\d+\.\d+$', value) is not None
+    
+    elif key == "Wildcard Mask (WCM)":
+        # Must have IP address format with dots
+        return re.match(r'^\d+\.\d+\.\d+\.\d+$', value) is not None
+    
+    return False
