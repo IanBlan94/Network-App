@@ -78,7 +78,7 @@
     font-size: 16px;
 }
 .numlist li a:hover {
-    color: rgb(181, 157, 19); 
+    color: #FFC107; 
     text-decoration: underline; 
 }
 .bin_dec_table {
@@ -129,26 +129,26 @@
     transition: transform 0.2s, background-color 0.2s;
 }
 .submitBtn{
-    background-color: #55c2da; 
+    background-color: #1E88E5; 
     color: white;
     border-radius: 5px; 
 }
 .playBtn{
-    background-color: #55c2da; 
+    background-color: #1E88E5; 
     color: white;
     border-radius: 5px; 
 }
 .playBtn:hover{
-    background-color: #55c2da;
+    background-color: #1E88E5;
     transform: scale(1.05);
 }
 .homeBtn{
-    background-color: #008CBA; 
+    background-color: #A52DAD; 
     color: white;
     border-radius: 5px; 
 }
 .homeBtn:hover{
-    background-color: #007BB5;
+    background-color: #A52DAD;
     transform: scale(1.05);
 }
 
@@ -167,10 +167,10 @@
     margin-left: 10px;
 }
 .correct {
-    color: green;
+    color: #086555;
     font-weight: bold;
 }
 .incorrect {
-    color: red;
+    color: #D81B60;
     font-weight: bold;
 }

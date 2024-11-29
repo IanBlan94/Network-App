@@ -22,8 +22,6 @@
                         <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
                         <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
                         <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
-                        <!-- need to make an html for a cheat sheet/info panel summarizing networking. 11/23/24 Amy S.-->
-                        <li><a href="{{ url_for('main') }}">Quick Reference Guide</a></li>
                     </ul>
                 </nav>
             </div>
@@ -54,13 +52,17 @@
                 {% if not results %}
                 <form>
                     <button type="submit" class="submitBtn">Check All</button>
-                <a href="{{ url_for('main') }}">Return to Main Menu</a>
+                    <form method="GET" action="{{ url_for('main') }}">
+                        <button type="submit" class="homeBtn">Return Home</button>
+                    </form>
                 </form>
                 
                 {% else %}
                     <form method="GET"> 
                         <button class="submitBtn"><a  href="{{ url_for('subnet_quiz_route') }}">New Challenge</a></button>
-                        <a href="{{ url_for('main') }}">Return to Main Menu</a>
+                        <form method="GET" action="{{ url_for('main') }}">
+                            <button type="submit" class="homeBtn">Return Home</button>
+                        </form>
                     </form>
                 {% endif %}
             </form>

@@ -8,7 +8,7 @@ headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
 binary_guess = pd.DataFrame(columns=['Random Decimal', 'Correct Binary', 'User Guess', 'Result'])
 wildcardmak_results = pd.DataFrame(columns=['Random Question, Correct Answer', 'User Guess', 'Result'])
-## NEEDS CSV FILE CREATION FOR CLASSFUL ADDRESS - AMY SANTJER ##
+classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Native Address Class', 'Native Address Map', 'Subnet Address Map', 'Subnet Mask', 'Wildcard Mask', 'User Answers', 'Correct Answers', 'Score'])
 
 app= Flask(__name__)
 app.secret_key = 'theonekey'
@@ -198,6 +198,8 @@ def subnet_quiz_route():
 
 @app.route("/classful_quiz", methods=["GET", "POST"])
 def classful_quiz():
+    global classful_quiz_results  # Use the global DataFrame
+
     if request.method == "GET" or session.get("question") is None:
         ip, default_mask, cidr_prefix = generate_random_classful_address()
         answers = calculate_classful_analysis(ip, default_mask, cidr_prefix)
@@ -218,14 +220,35 @@ def classful_quiz():
 
         # Validate user answers
         result = []
+        score = 0
         for key, correct_answer in correct_answers.items():
             user_answer = user_answers.get(key, "")
+            is_correct = user_answer == correct_answer
+            if is_correct:
+                score += 1
             result.append({
                 "question": key,
                 "user_answer": user_answer,
                 "correct_answer": correct_answer,
-                "correct": user_answer == correct_answer
+                "correct": is_correct
             })
+
+        # Log the results to the CSV
+        classful_quiz_results.loc[len(classful_quiz_results)] = {
+            'IP Address': session['ip'],
+            'CIDR Prefix': session['cidr_prefix'],
+            'Native Address Class': correct_answers.get('Native Address Class', ''),
+            'Native Address Map': correct_answers.get('Native Address Map', ''),
+            'Subnet Address Map': correct_answers.get('Subnet Address Map (SAM)', ''),
+            'Subnet Mask': correct_answers.get('Subnet Mask (SNM)', ''),
+            'Wildcard Mask': correct_answers.get('Wildcard Mask (WCM)', ''),
+            'User Answers': str(user_answers),
+            'Correct Answers': str(correct_answers),
+            'Score': f"{score}/{len(correct_answers)}"
+        }
+
+        # Save results to CSV after each quiz
+        classful_quiz_results.to_csv('classful_quiz_results.csv', index=False)
 
     return render_template("classfuladdress.html",
                            question=session["question"],

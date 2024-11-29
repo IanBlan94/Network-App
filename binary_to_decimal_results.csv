@@ -1,7 +1,0 @@
-Random Binary,Correct Decimal,User Guess,Result
-01110010,114,12,Incorrect!. Please try again
-01110010,114,18,Incorrect!. Please try again
-01110010,114,15,"Sorry, you've used all 3 tries! The correct answer was 114."
-01111101,125,48,Incorrect!. Please try again
-01111101,125,15,Incorrect!. Please try again
-01111101,125,18,"Sorry, you've used all 3 tries! The correct answer was 125."
