@@ -185,3 +185,54 @@
     color: #D81B60;
     font-weight: bold;
 }
+.question-container {
+    margin-bottom: 16px;
+}
+
+.question-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.question-text { /* textbox along side question for addy analysis */
+    min-width: 200px;
+    font-weight: 500;
+    color: black;
+}
+
+input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+.result-row {
+    margin-top: 4px;
+    margin-left: 210px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+.button-group {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: none;
+    background-color: #4a90e2;
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
+}

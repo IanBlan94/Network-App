@@ -1,5 +1,7 @@
 """
 This file generates an classful address and calculates it based on certain questions
+
+@author: amyxg
 """
 import random
 import ipaddress

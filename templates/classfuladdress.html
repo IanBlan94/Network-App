@@ -35,69 +35,78 @@
 
     <!-- main body elements -->
     <main>
-        <div class="subnet-container">
-            <h1>Classful Address Analysis</h1>
-            <div class="userValue">
+        <div class="main-container">
+            <section class="first section">
                 <div class="image">
                     <img src="{{ url_for('static', filename='images/ax_trojan.png') }}" alt="ax trojan">
                 </div>
-                <form method="POST">
-                    <p>{{question}}</p>
-                    <!-- Loop through the answers -->
-                    {% for key, correct_answer in answers.items() %}
-                    <div class="question">
-                        <label for="{{ key }}">{{ key }}</label><br>
-                        <input 
-                            type="{% if key == 'Native Address Class' or key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
-                            name="{{ key }}"
-                            {% if key == "Native Address Class" %}
-                                placeholder="Enter an integer (0-255)"
-                                min="0"
-                                max="255"
-                            {% elif key == "Leading Bit Pattern" %}
-                                placeholder="Enter an integer"
-                            {% elif key == "Native Address Map" %}
-                                placeholder="Format: xxx.xxx.H.H"
-                            {% elif key == "Subnet Mask (SNM)" or key == "Wildcard Mask (WCM)" %}
-                                placeholder="Format: xxx.xxx.xxx.xxx"
-                            {% endif %}
-                            required
-                        >
-                        {% if results %}
-                            {% for result in results %}
-                                {% if result.question == key %}
-                                <!--<p class="feedback {{ 'correct' if result.correct else 'incorrect' }}"> -->
-                                    {% if result.correct %}
-                                        <span style="color: #086555;">✓ Correct</span>
-                                    {% else %}
-                                        <span style="color: #D81B60;">✗ Incorrect</span>
-                                    {% endif %}
-                                    (Correct Answer: {{ result.correct_answer }})
-                                <!--    </p>-->
+                <div class="text">
+                    <h1>Address Analysis</h1>
+                    <div class="userValue">
+                        <form method="POST">
+                            <p>{{question}}</p>
+                             <!-- Loop through the answers -->
+                            {% for key, correct_answer in answers.items() %}
+                            <div class="question-container">
+                                <div class="question-row">
+                                    <label class="question-text">{{ key }}: </label>
+                                     <!-- exception handling for user's inputs -->
+                                    <input 
+                                        type="{% if key == 'Native Address Class' or key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
+                                        name="{{ key }}"
+                                        {% if key == "Native Address Class" %}
+                                            placeholder="Enter an integer (0-255)"
+                                            min="0"
+                                            max="255"
+                                        {% elif key == "Leading Bit Pattern" %}
+                                            placeholder="Enter an integer"
+                                        {% elif key == "Native Address Map" %}
+                                            placeholder="Format: xxx.xxx.H.H"
+                                        {% elif key == "Subnet Mask (SNM)" or key == "Wildcard Mask (WCM)" %}
+                                            placeholder="Format: xxx.xxx.xxx.xxx"
+                                        {% endif %}
+                                        required
+                                    >
+                                </div>
+                                {% if results %}
+                                    {% for result in results %}
+                                        {% if result.question == key %}
+                                            <div class="result-row">
+                                                {% if result.correct %}
+                                                    <span style="color: #086555;">✓ Correct</span>
+                                                {% else %}
+                                                    <span style="color: #D81B60;">✗ Incorrect</span>
+                                                    {% if result.validation_error %}
+                                                        <span style="color: #D81B60;">Invalid format. Please check input requirements.</span>
+                                                    {% endif %}
+                                                    <span>(Correct Answer: {{ result.correct_answer }})</span>
+                                                {% endif %}
+                                            </div>
+                                        {% endif %}
+                                    {% endfor %}
                                 {% endif %}
+                            </div>
                             {% endfor %}
+
+                            {% if not results %}
+                            <div class="button-group">
+                                <button class="submitBtn" type="submit">Check All</button>
+                                <form method="GET" action="{{ url_for('main') }}">
+                                    <button type="submit" class="homeBtn">Return Home</button>
+                                </form>
+                            </div>
+                            {% else %}
+                                <div class="alignBtns">
+                                    <form method="GET"> 
+                                        <button class="submitBtn" style="color: white;"><a  href="{{ url_for('classful_quiz') }}">New Challenge</a></button>
+                                    </form>
+                                    <form method="GET" action="{{ url_for('main') }}">
+                                        <button type="submit" class="homeBtn">Return Home</button>
+                                    </form>
+                                </div>
                         {% endif %}
+                        </form>    
                     </div>
-                    {% endfor %}
-                    {% if not results %}
-                        <form>
-                            <button type="submit" class="submitBtn">Check All</button>
-                            <form method="GET" action="{{ url_for('main') }}">
-                                <button type="submit" class="homeBtn">Return Home</button>
-                            </form>
-                        </form>
-                    {% else %}
-                        <div class="alignBtns">
-                            <form method="GET"> 
-                                <button class="submitBtn" style="color: white;"><a  href="{{ url_for('classful_quiz') }}">New Challenge</a></button>
-                            </form>
-                            <form method="GET" action="{{ url_for('main') }}">
-                                <button type="submit" class="homeBtn">Return Home</button>
-                            </form>
-                        </div>
-                {% endif %}
-                </form>    
-            </div>
         </div>
     </main>
 </body>
