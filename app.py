@@ -274,9 +274,6 @@ def classful_quiz():
                            question=session["question"],
                            answers=session["answers"],
                            results=result)
-
-
-
 if __name__ == '__main__':
     app.run(debug=True)
 

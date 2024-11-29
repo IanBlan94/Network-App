@@ -11,9 +11,14 @@
     width: 30%;
     display: flex;
     flex-direction: row-reverse;
+    align-items: center; 
 }
 .section .image img {
     width: 50%;
+    height: auto; 
+    object-fit: contain; 
+    max-width: 100%; 
+    display: block; 
 }
 .section .text{
     width: 50%;
@@ -52,8 +57,14 @@
     .section{
         flex-direction: column;
     }
-    .section .image {
+    .section .image { /* Responsive adjustments for images */
         width: 100%;
+        justify-content: center; 
+    }
+    .section .image img {
+        width: auto; 
+        max-height: 300px; 
+        max-width: 90%; 
     }
     .section .text {
         width: 100%;
@@ -193,11 +204,16 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    outline: 2px black solid;
+    padding: 5px;
+    margin-bottom: 10px;
+    border-radius: 10px;
 }
 .question-text { /* textbox along side question for addy analysis */
     min-width: 200px;
     font-weight: 500;
     color: black;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 input {
