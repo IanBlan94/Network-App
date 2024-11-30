@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session # type: ignore
 import random
 import pandas as pd
-from wildcard_mask import prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask
+from wildcard_mask import calculate_subnet_address_map, prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask, generate_ip_and_prefix
 from classaddress import generate_random_classful_address, calculate_classful_analysis, validate_input 
 
 headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
@@ -139,62 +139,91 @@ def binary_to_decimal():
     
 @app.route('/subnet-quiz', methods=['GET', 'POST'])
 def subnet_quiz_route():
-    # Load questions and generate answers
-    
-    if request.method == 'GET':
-        session.pop('results', None)
-        session.pop('questions_and_answers', None)
-        questions_from_csv = load_questions_from_csv('questions.csv')
-        questions_and_answers = []
-        
-        for question_data in questions_from_csv:
-            ip, prefix_length = random.choice(subList)
-            subnet_mask = prefix_length_to_subnet_mask(prefix_length)
-            question = question_data["question"].replace("{ip}", ip).replace("{prefix_length}", str(prefix_length)).replace("{subnet_mask}", subnet_mask)
+    global subnet_quiz_results  # Ensure global variable for results tracking
 
-            # Dynamically generate correct answer
-            if "Address Class" in question:
-                correct_answer = f"{get_address_class_and_pattern(ip)[0]} / {get_address_class_and_pattern(ip)[1]}"
-            elif "the prefix length" in question:
-                correct_answer = str(prefix_length)
-            elif "wildcard mask" in question:
-                correct_answer = calculate_wildcard_mask(prefix_length)
-            elif "the subnet mask" in question:
-                correct_answer = prefix_length_to_subnet_mask(prefix_length)
-            elif "network bits" in question:
-                correct_answer = prefix_network_bits(prefix_length)
-            elif "host bits" in question:
-                correct_answer = prefix_host_bits(prefix_length)
-            else:
-                correct_answer = "Unknown"
+    if request.method == 'GET' or session.get("question") is None:
+        # Generate a random IP address and prefix
+        ip, prefix_length = generate_ip_and_prefix()
+        subnet_mask = prefix_length_to_subnet_mask(prefix_length)
+        answers = {
+            "Subnet Mask": subnet_mask,
+            "Wildcard Mask": calculate_wildcard_mask(prefix_length),
+            "Subnet Address Map": calculate_subnet_address_map(ip, prefix_length)
+        }
 
-            questions_and_answers.append({"question": question, "answer": correct_answer})
+        # Create the question
+        question = f"Given the IP address {ip}/{prefix_length}, answer the following:"
 
-        # Store questions in the session
-        session['questions_and_answers'] = questions_and_answers
-        session['results'] = None
+        # Store data in session for use during POST
+        session["ip"] = ip
+        session["prefix_length"] = prefix_length
+        session["answers"] = answers
+        session["question"] = question
 
-    elif request.method == 'POST':
-        # Retrieve questions and submitted answers
-        questions_and_answers = session.get('questions_and_answers', [])
-        user_answers = request.form.to_dict()
-        results = []
+        result = None  # No result initially
+    else:
+        # User submitted answers (POST request)
+        user_answers = {
+            key: request.form.get(key, "").strip() for key in session["answers"].keys()
+        }
+        correct_answers = session["answers"]
 
-        for qa in questions_and_answers:
-            user_answer = user_answers.get(qa["question"], "").strip()
-            correct = user_answer == qa["answer"]
-            results.append({
-                "question": qa["question"],
-                "correct_answer": qa["answer"],
+        # Validate user answers and calculate results
+        result = []
+        score = 0
+        validation_error = False
+        for key, correct_answer in correct_answers.items():
+            user_answer = user_answers.get(key, "")
+            # Check input validation
+            if not validate_input(key, user_answer):
+                validation_error = True
+                result.append({
+                    "question": key,
+                    "user_answer": user_answer,
+                    "correct_answer": correct_answer,
+                    "correct": False,
+                    "validation_error": True
+                })
+                continue
+            is_correct = user_answer == correct_answer
+            if is_correct:
+                score += 1
+            result.append({
+                "question": key,
                 "user_answer": user_answer,
-                "correct": correct
+                "correct_answer": correct_answer,
+                "correct": is_correct
             })
 
-        # Store results in session
-        session['results'] = results
+        # Prevent submission on validation errors
+        if validation_error:
+            return render_template("wildcardmask.html",
+                                   question=session["question"],
+                                   answers=session["answers"],
+                                   results=result,
+                                   validation_error=True)
 
-    return render_template('wildcardmask.html', questions=session.get('questions_and_answers', []), results=session.get('results'))
+        # Log results to a DataFrame or CSV
+        subnet_quiz_results.loc[len(subnet_quiz_results)] = {
+            'IP Address': session['ip'],
+            'Prefix Length': session['prefix_length'],
+            'Subnet Mask': correct_answers.get('Subnet Mask', ''),
+            'Wildcard Mask': correct_answers.get('Wildcard Mask', ''),
+            'Network Bits': correct_answers.get('Network Bits', ''),
+            'Host Bits': correct_answers.get('Host Bits', ''),
+            'Address Class': correct_answers.get('Address Class', ''),
+            'User Answers': str(user_answers),
+            'Correct Answers': str(correct_answers),
+            'Score': f"{score}/{len(correct_answers)}"
+        }
 
+        # Save results to CSV after quiz submission
+        subnet_quiz_results.to_csv('subnet_quiz_results.csv', index=False)
+
+    return render_template("wildcardmask.html",
+                           question=session["question"],
+                           answers=session["answers"],
+                           results=result)
 
 @app.route("/classful_quiz", methods=["GET", "POST"])
 def classful_quiz():

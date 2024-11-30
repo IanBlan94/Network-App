@@ -9,7 +9,8 @@
     <!-- links for reference -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-
+</head>
+<body>
     <div class="header">
         <div class="header-container">
             <div class="left-bar">
@@ -27,50 +28,75 @@
             </div>
         </div>
     </div>
-</head>
-<body>
-    <div class="subnet-container">
-        <h1 class="subnet-header">Subnet Quiz</h1>
-        <div class="userValue">
-            <form method="POST">
-                {% for question in questions %}
-                <div class="question">
-                    <label>{{ question.question }}</label><br>
-                    <input type="text" name="{{ question.question }}" value="">
-                    {% if results %}
-                        {% for result in results %}
-                            {% if result.question == question.question %}
-                            <span class="feedback {% if result.correct %}correct{% else %}incorrect{% endif %}">
-                                {{ '✓ Correct' if result.correct else '✗ Incorrect' }} 
-                                (Correct Answer: {{ result.correct_answer }})
-                            </span>
-                            {% endif %}
-                        {% endfor %}
-                    {% endif %}
-                </div>
-                {% endfor %}
-                {% if not results %}
-                <form>
-                    <button type="submit" class="submitBtn">Check All</button>
-                    <form method="GET" action="{{ url_for('main') }}">
-                        <button type="submit" class="homeBtn">Return Home</button>
-                    </form>
-                </form>
-                
-                {% else %}
-                    <form method="GET"> 
-                        <button class="submitBtn"><a  href="{{ url_for('subnet_quiz_route') }}">New Challenge</a></button>
-                        <form method="GET" action="{{ url_for('main') }}">
-                            <button type="submit" class="homeBtn">Return Home</button>
-                        </form>
-                    </form>
-                {% endif %}
-            </form>
+
+    <div class="main-container">
+        <section class="first section">
             <div class="image">
-                <img src="{{ url_for('static', filename='images/sword_trojan.png') }}" alt="presenting trojan">
+                <img src="{{ url_for('static', filename='images/sword_trojan.png') }}" alt="ax trojan">
             </div>
-            
-        </div>
+            <div class="text">
+                <h1>Subnet Quiz</h1>
+                <div class="userValue">
+                    <form method="POST">
+                        <p>{{question}}</p>
+                         <!-- Loop through the answers -->
+                        {% for key, correct_answer in answers.items() %}
+                        <div class="question-container">
+                            <div class="question-row">
+                                <label class="question-text">{{ key }}: </label>
+                                 <!-- Unified input field styles -->
+                                <input 
+                                    type="{% if key == 'Native Address Class' or key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
+                                    name="{{ key }}"
+                                    {% if key == "Wildcard Mask" %}
+                                    placeholder="Format: xxx.xxx.xxx.xxx"
+                                    {% elif key == "Subnet Mask" %}
+                                    placeholder="Format: xxx.xxx.xxx.xxx"
+                                    {% endif %}
+                                    required
+                                >
+                            </div>
+                            {% if results %}
+                                {% for result in results %}
+                                    {% if result.question == key %}
+                                        <div class="result-row">
+                                            {% if result.correct %}
+                                                <span style="color: #086555;">✓ Correct</span>
+                                            {% else %}
+                                                <span style="color: #D81B60;">✗ Incorrect</span>
+                                                <span>(Correct Answer: {{ result.correct_answer }})</span>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+    
+                        {% if not results %}
+                        <div class="button-group">
+                            <button class="submitBtn" type="submit">Check All</button>
+                            <form method="GET" action="{{ url_for('main') }}">
+                                <button type="submit" class="homeBtn">Return Home</button>
+                            </form>
+                        </div>
+                        {% else %}
+                            <div class="alignBtns">
+                                <form method="GET"> 
+                                    <button class="submitBtn" style="color: white;"><a href="{{ url_for('subnet_quiz_route') }}">New Challenge</a></button>
+                                </form>
+                                <form method="GET" action="{{ url_for('main') }}">
+                                    <button type="submit" class="homeBtn">Return Home</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </form>
+                </div>
+            </div>
+        </section>
     </div>
+    
+
+    
 </body>
 </html>
