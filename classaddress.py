@@ -111,17 +111,33 @@ def validate_input(key, value):
             return True
         except ValueError:
             return False
-    
-    elif key == "Subnet Address Map (SAM)":
-        # Must have IP address format with start and end addresses
-        return re.match(r'^\d+\.\d+\.\d+\.\d+ - \d+\.\d+\.\d+\.\d+$', value) is not None
+    elif key == "Subnet Mask (SNM)":
+    # Validate format and ensure it's a valid subnet mask
+        try:
+            octets = list(map(int, value.split(".")))
+            if len(octets) != 4 or not all(0 <= octet <= 255 for octet in octets):
+                return False
+        
+        # Check for valid subnet mask bit pattern
+            mask_binary = "".join(f"{octet:08b}" for octet in octets)
+            return re.match(r"^1*0*$", mask_binary) is not None
+        except ValueError:
+            return False
+   
     
     elif key == "Subnet Mask (SNM)":
         # Must have IP address format with dots
         return re.match(r'^\d+\.\d+\.\d+\.\d+$', value) is not None
     
     elif key == "Wildcard Mask (WCM)":
-        # Must have IP address format with dots
-        return re.match(r'^\d+\.\d+\.\d+\.\d+$', value) is not None
-    
-    return False
+    # Validate format and ensure it's a valid wildcard mask
+        try:
+            octets = list(map(int, value.split(".")))
+            if len(octets) != 4 or not all(0 <= octet <= 255 for octet in octets):
+                return False
+            
+            # Check if the wildcard mask is valid (bitwise inverse of a subnet mask)
+            mask_binary = "".join(f"{octet:08b}" for octet in octets)
+            return re.match(r"^0*1*$", mask_binary) is not None
+        except ValueError:
+            return False
