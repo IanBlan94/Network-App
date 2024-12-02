@@ -16,6 +16,15 @@ def generate_random_classful_address():
             - ip (str): The randomly generated IP address.
             - default_mask (int): The default mask length for the IP's class.
             - cidr_prefix (int): A random CIDR prefix for subnetting.
+    
+     Doctests:
+        >>> ip, mask, prefix = generate_random_classful_address()
+        >>> isinstance(ip, str)
+        True
+        >>> isinstance(mask, int)
+        True
+        >>> isinstance(prefix, int)
+        True
     """
     # chooses random str of A, B, or C
     address_class = random.choice(['A', 'B', 'C'])
@@ -48,9 +57,19 @@ def calculate_classful_analysis(ip, default_mask, cidr_prefix):
         dict: 
             - Native Address Class: The IP's class (A, B, or C).
             - Native Address Map: Address range based on the default mask.
-            - Subnet Address Map (SAM): Address range based on the CIDR prefix.
             - Subnet Mask (SNM): Subnet mask for the given CIDR prefix.
             - Wildcard Mask (WCM): Complement of the subnet mask.
+
+     Doctests:
+        >>> result = calculate_classful_analysis('10.0.0.1', 8, 24)
+        >>> result['Native Address Class']
+        '10'
+        >>> result['Native Address Map']
+        '10.H.H.H'
+        >>> result['Subnet Mask (SNM)']
+        '255.255.255.0'
+        >>> result['Wildcard Mask (WCM)']
+        '0.0.0.255'
     """
     # Convert the IP and CIDR prefix into a network object, to calculate laterrrr for subnet mask
     network = ipaddress.ip_network(f"{ip}/{cidr_prefix}", strict=False)
@@ -91,6 +110,18 @@ def validate_input(key, value):
 
     Returns:
         bool: False
+
+     Doctests:
+        >>> validate_input('Native Address Class', '10')
+        True
+        >>> validate_input('Native Address Map', '10.H.H.H')
+        True
+        >>> validate_input('Leading Bit Pattern', '0')
+        True
+        >>> validate_input('Subnet Mask (SNM)', '255.255.255.0')
+        True
+        >>> validate_input('Wildcard Mask (WCM)', '0.0.0.255')
+        True
     """
     if key == "Native Address Class":
         # Must be an integer between 0-255
@@ -141,3 +172,7 @@ def validate_input(key, value):
             return re.match(r"^0*1*$", mask_binary) is not None
         except ValueError:
             return False
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
