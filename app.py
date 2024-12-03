@@ -139,7 +139,7 @@ def binary_to_decimal():
     
 @app.route('/subnet-quiz', methods=['GET', 'POST'])
 def subnet_quiz_route():
-    global subnet_quiz_results  # Ensure global variable for results tracking
+    global wildcardmak_results  
 
     if request.method == 'GET' or session.get("question") is None:
         # Generate a random IP address and prefix
@@ -151,79 +151,63 @@ def subnet_quiz_route():
             "Subnet Address Map": calculate_subnet_address_map(ip, prefix_length)
         }
 
-        # Create the question
         question = f"Given the IP address {ip}/{prefix_length}, answer the following:"
 
-        # Store data in session for use during POST
         session["ip"] = ip
         session["prefix_length"] = prefix_length
         session["answers"] = answers
         session["question"] = question
 
-        result = None  # No result initially
+        result = None
     else:
         # User submitted answers (POST request)
         user_answers = {
-            key: request.form.get(key, "").strip() for key in session["answers"].keys()
+            key: request.form.get(key, "").strip() 
+            for key in session["answers"].keys()
         }
         correct_answers = session["answers"]
 
         # Validate user answers and calculate results
         result = []
         score = 0
-        validation_error = False
+        
         for key, correct_answer in correct_answers.items():
-            user_answer = user_answers.get(key, "")
-            # Check input validation
-            if not validate_input(key, user_answer):
-                validation_error = True
-                result.append({
-                    "question": key,
-                    "user_answer": user_answer,
-                    "correct_answer": correct_answer,
-                    "correct": False,
-                    "validation_error": True
-                })
-                continue
-            is_correct = user_answer == correct_answer
+            user_answer = user_answers.get(key, "").strip()
+            
+            # Normalize both answers for comparison
+            normalized_user = user_answer.upper().replace(" ", "")
+            normalized_correct = correct_answer.upper().replace(" ", "")
+            
+            # Compare normalized versions
+            is_correct = normalized_user == normalized_correct
+            
             if is_correct:
                 score += 1
+                
             result.append({
                 "question": key,
                 "user_answer": user_answer,
-                "correct_answer": correct_answer,
+                "correct_answer": correct_answer if not is_correct else None,
                 "correct": is_correct
             })
 
-        # Prevent submission on validation errors
-        if validation_error:
-            return render_template("wildcardmask.html",
-                                   question=session["question"],
-                                   answers=session["answers"],
-                                   results=result,
-                                   validation_error=True)
-
-        # Log results to a DataFrame or CSV
-        subnet_quiz_results.loc[len(subnet_quiz_results)] = {
+        # Log results
+        wildcardmak_results.loc[len(wildcardmak_results)] = {
             'IP Address': session['ip'],
             'Prefix Length': session['prefix_length'],
             'Subnet Mask': correct_answers.get('Subnet Mask', ''),
             'Wildcard Mask': correct_answers.get('Wildcard Mask', ''),
-            'Network Bits': correct_answers.get('Network Bits', ''),
-            'Host Bits': correct_answers.get('Host Bits', ''),
-            'Address Class': correct_answers.get('Address Class', ''),
             'User Answers': str(user_answers),
             'Correct Answers': str(correct_answers),
             'Score': f"{score}/{len(correct_answers)}"
         }
 
-        # Save results to CSV after quiz submission
-        subnet_quiz_results.to_csv('subnet_quiz_results.csv', index=False)
+        wildcardmak_results.to_csv('subnet_quiz_results.csv', index=False)
 
     return render_template("wildcardmask.html",
-                           question=session["question"],
-                           answers=session["answers"],
-                           results=result)
+                         question=session["question"],
+                         answers=session["answers"],
+                         results=result)
 
 @app.route("/classful_quiz", methods=["GET", "POST"])
 def classful_quiz():

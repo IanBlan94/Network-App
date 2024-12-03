@@ -58,64 +58,31 @@ def calculate_subnet_address_map(ip, prefix_length):
         prefix_length (int): The prefix length.
 
     Returns:
-        dict: A dictionary containing the SAM in the specified format.
+        str: SAM with N/S/H bits per octet (e.g., "N.N.S.H")
+
+    Example:
+        >>> calculate_subnet_address_map("192.168.1.0", 24)
+        "N.N.N.H"
     """
-    # Determine the address class and initial network bits
-    address_class, _ = get_address_class_and_pattern(ip)
-
-    if address_class == 'A':
-        initial_network_bits = 8
-    elif address_class == 'B':
-        initial_network_bits = 16
-    elif address_class == 'C':
-        initial_network_bits = 24
-    else:
-        raise ValueError("Invalid IP address class for generating SAM.")
-
-    # Calculate the number of subnet and host bits
-    subnet_bits = max(0, prefix_length - initial_network_bits)
-    host_bits = 32 - prefix_length
-
-    # Build the SAM string
-    sam = []
-    remaining_network_bits = initial_network_bits
-
-    for octet in range(4):
-        if remaining_network_bits >= 8:
-            # Full network octet
-            sam.append("N")
-            remaining_network_bits -= 8
-        elif remaining_network_bits > 0:
-            # Partial network octet
-            sam.append("N" * remaining_network_bits + "s" * subnet_bits + "h" * host_bits)
-            subnet_bits -= (8 - remaining_network_bits)
-            host_bits -= (8 - remaining_network_bits)
-            remaining_network_bits = 0
-        elif subnet_bits >= 8:
-            # Full subnet octet
-            sam.append("s")
-            subnet_bits -= 8
-        elif subnet_bits > 0:
-            # Partial subnet octet
-            sam.append("s" * subnet_bits + "h" * host_bits)
-            host_bits -= (8 - subnet_bits)
-            subnet_bits = 0
-        elif host_bits >= 8:
-            # Full host octet
-            sam.append("H")
-            host_bits -= 8
-        elif host_bits > 0:
-            # Partial host octet
-            sam.append("h" * host_bits)
-            host_bits = 0
-        else:
-            # Empty octet
-            sam.append("H")
-
-    # Combine the SAM
-    sam_str = ".".join(sam)
-
-    return sam_str
+    # Convert prefix length to a total of 32 bits
+    sam_bits = []
+    
+    # Fill in network bits (N)
+    for i in range(prefix_length):
+        sam_bits.append('N')
+    
+    # Fill in host bits (H)
+    for i in range(32 - prefix_length):
+        sam_bits.append('H')
+    
+    # Convert bits to octets (groups of 8)
+    sam_octets = []
+    for i in range(0, 32, 8):
+        octet = ''.join(sam_bits[i:i+8])
+        sam_octets.append(octet)
+    
+    # Join octets with dots
+    return '.'.join(sam_octets)
 
 def prefix_length_to_subnet_mask(prefix_length):   
     """
@@ -126,11 +93,12 @@ def prefix_length_to_subnet_mask(prefix_length):
       bits used for the network portion of the address.
       
   Returns:
-      str: The subnet mask in dotted decimal format.
+      str: The subnet mask in dotted decimal format. (ex. 255.255.255.0)
   """
     
     mask = (0xFFFFFFFF >> (32 - prefix_length)) << (32 - prefix_length)
-    return '.'.join([str((mask >> (i * 8)) & 0xFF) for i in range(4)[::-1]])
+    octets = [(mask >> (24 - i * 8)) & 0xFF for i in range(4)]
+    return '.'.join(str(octet) for octet in octets)
 
 # determines buts for subnet mask. Question 5
 
@@ -182,13 +150,11 @@ def calculate_wildcard_mask(prefix_length):
        prefix_length (int): The length of the prefix.
 
    Returns:
-       str: The wildcard mask in dotted decimal format.
+       str: The wildcard mask in dotted decimal format. (ex. "0.0.0.255")
    """
     
     subnet_mask = prefix_length_to_subnet_mask(prefix_length)
-    wildcard_mask = '.'.join([str(255 - int(octet))
-                             for octet in subnet_mask.split('.')])
-    return wildcard_mask
+    return '.'.join(str(255 - int(octet)) for octet in subnet_mask.split('.'))
 
 # Function to determine the class and pattern of an IP address
 

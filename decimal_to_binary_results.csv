@@ -1,4 +1,0 @@
-Random Decimal,Correct Binary,User Guess,Result
-10110000,176,10011001,Incorrect!. Please try again
-10110000,176,00100101,Incorrect!. Please try again
-10110000,176,10011001,"Sorry, you've used all 3 tries! The correct answer was 10110000."
