@@ -81,7 +81,7 @@
                                 <!-- user's wrong guesses -->
                                 <div class="wrongGuesses" style="color: black">
                                     {% if wrong_guesses %}
-                                        <u>Wrong Guesses</u>: {% for guess in wrong_guesses %}<span style="color: red; font-weight: bold;">{{ guess }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
+                                        <u><strong>Previous Guesses</strong></u>: {% for guess in wrong_guesses %}<span style="color: red; font-weight: bold;">{{ guess }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
                                     {% endif %}
                                 </div>
                                 <label for="user_guess">Enter the Decimal Value:</label>

@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session # type: ignore
 import random
 import pandas as pd
+import webview
 from wildcard_mask import calculate_subnet_address_map, prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask, generate_ip_and_prefix
 from classaddress import generate_random_classful_address, calculate_classful_analysis, validate_input 
 
@@ -12,6 +13,7 @@ classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Nati
 
 app= Flask(__name__)
 app.secret_key = 'theonekey'
+webview.create_window("Networking Application",app)
 
 
 @app.route('/')
@@ -48,17 +50,17 @@ def decimal_to_binary():
             
             # Validate the guess
             if user_guess == random_binary:
-                result = f"Congratulations! You've gotten it correct!" 
+                result = f"Congratulations! You got it right!" 
                 session['game_over'] = True
                 session['wrong_guesses'].clear
             else:
                 session['wrong_guesses'].append(user_guess)  # Save wrong guess
                 if session['counter'] >= 2:
-                    result = f"Sorry, you've used all 3 tries! The correct answer was {random_binary}."
+                    result = f"Sorry, you've used all 3 tries! Correct answer: {random_binary}."
                     session['game_over'] = True  # Set game over to True
                     session['wrong_guesses'].clear
                 else:
-                    result = f"Incorrect!. Please try again"
+                    result = f"Good Effort! Please try again."
                 session['counter'] += 1
             
             # Log results to CSV
@@ -107,17 +109,17 @@ def binary_to_decimal():
             # Validate the guess
             
             if user_guess == random_decimal:
-                result = f"Congratulations! You've gotten it correct!" 
+                result = f"Congratulations! You got it right!" 
                 session['game_over'] = True
                 session['wrong_guesses'].clear
             else:
                 session['wrong_guesses'].append(user_guess)
                 if session['counter'] >= 2:
-                    result = f"Sorry, you've used all 3 tries! The correct answer was {random_decimal}."
+                    result = f"Sorry, you've used all 3 tries! Correct answer: {random_decimal}."
                     session['game_over'] = True  # Set game over to True
                     session['wrong_guesses'].clear
                 else:
-                    result = f"Incorrect!. Please try again"
+                    result = f"Good Effort! Please try again."
             session['counter'] += 1
             
             decimal_guess.loc[len(decimal_guess)] = [random_binary, random_decimal, user_guess, result]
@@ -143,12 +145,12 @@ def subnet_quiz_route():
 
     if request.method == 'GET' or session.get("question") is None:
         # Generate a random IP address and prefix
-        ip, prefix_length = generate_ip_and_prefix()
+        ip, default_mask, prefix_length = generate_random_classful_address()
         subnet_mask = prefix_length_to_subnet_mask(prefix_length)
         answers = {
+            "Subnet Address Map": calculate_subnet_address_map(ip, prefix_length),
             "Subnet Mask": subnet_mask,
-            "Wildcard Mask": calculate_wildcard_mask(prefix_length),
-            "Subnet Address Map": calculate_subnet_address_map(ip, prefix_length)
+            "Wildcard Mask": calculate_wildcard_mask(prefix_length)
         }
 
         question = f"Given the IP address {ip}/{prefix_length}, answer the following:"
@@ -288,6 +290,7 @@ def classful_quiz():
                            answers=session["answers"],
                            results=result)
 if __name__ == '__main__':
-    app.run(debug=True)
+    #app.run(debug=True)
+    webview.start()
 
 
