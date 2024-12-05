@@ -24,8 +24,9 @@ Each module allows up to 3 attempts per question, with results stored in CSV fil
 
 ### Ensure these files exist:
     -app.py
-    -templates/ (HTML files: main.html, -decimaltobinary.html, binarytodecimal.html,wildcardmask.html)
-    -wildcard_mask.py (for subnet quiz)
+    -templates/ (HTML files: main.html, decimaltobinary.html, binarytodecimal.html, classfuladdress.html, wildcardmask.html)
+    -classaddress.py (classful address analysis quiz)
+    -wildcard_mask.py (subnet quiz)
     -questions.csv (subnet quiz questions)
 
 ### Run the App:
