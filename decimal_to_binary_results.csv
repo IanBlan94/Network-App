@@ -1,2 +1,5 @@
 Random Decimal,Correct Binary,User Guess,Result
-00111100,60,10011001,Good Effort! Please try again
+00101011,43,10001000,Good Effort! Please try again.
+00101011,43,10101010,Good Effort! Please try again.
+00101011,43,10001000,"Sorry, you've used all 3 tries! Correct answer: 00101011."
+00001100,12,00001100,Congratulations! You got it right!
