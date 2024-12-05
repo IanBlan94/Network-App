@@ -20,7 +20,7 @@ Each module allows up to 3 attempts per question, with results stored in CSV fil
   sudo apt-get update
   sudo apt-get install python3-dev python3-pip python3-setuptools libgtk-3-dev webkit2gtk-4.0-dev
   pip install --no-cache-dir pywebview
-  pip install flask pandas pywebview
+  pip install flask pandas webview
 
 ### Ensure these files exist:
     -app.py

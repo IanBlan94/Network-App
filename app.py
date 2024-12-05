@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session # type: ignore
 import random
 import pandas as pd
-#import pywebview as webview
+import webview
 from wildcard_mask import calculate_subnet_address_map, prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask, generate_ip_and_prefix
 from classaddress import generate_random_classful_address, calculate_classful_analysis, validate_input 
 
@@ -14,7 +14,7 @@ classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Nati
 
 app= Flask(__name__)
 app.secret_key = 'theonekey'
-#webview.create_window("Networking Application",app)
+webview.create_window("Networking Application",app)
 
 
 @app.route('/')
@@ -291,9 +291,7 @@ def classful_quiz():
                            answers=session["answers"],
                            results=result)
 if __name__ == '__main__':
-    #app.run(debug=True)
-    #webview.start()
-    if __name__ == '__main__':
-        app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True)
+    webview.start()
 
 
