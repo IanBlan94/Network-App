@@ -58,31 +58,27 @@ def calculate_subnet_address_map(ip, prefix_length):
         prefix_length (int): The prefix length.
 
     Returns:
-        str: SAM with N/S/H bits per octet (e.g., "N.N.S.H")
-
-    Example:
-        >>> calculate_subnet_address_map("192.168.1.0", 24)
-        "N.N.N.H"
+        str: SAM with N/H per octet (e.g., "N.N.N.H").
     """
-    # Convert prefix length to a total of 32 bits
-    sam_bits = []
-    
-    # Fill in network bits (N)
-    for i in range(prefix_length):
-        sam_bits.append('N')
-    
-    # Fill in host bits (H)
-    for i in range(32 - prefix_length):
-        sam_bits.append('H')
-    
-    # Convert bits to octets (groups of 8)
     sam_octets = []
     for i in range(0, 32, 8):
-        octet = ''.join(sam_bits[i:i+8])
-        sam_octets.append(octet)
+        # Calculate bits in the current octet
+        network_bits = max(0, min(8, prefix_length - i))
+        host_bits = 8 - network_bits
+
+        if network_bits == 8:  # All network bits
+            sam_octets.append('N')
+        elif host_bits == 8:  # All host bits
+            sam_octets.append('H')
+        else:  # Mixed case
+            # Host dominance: majority bits are host
+            if host_bits > network_bits:
+                sam_octets.append('H')
+            else:
+                sam_octets.append('S')
     
-    # Join octets with dots
     return '.'.join(sam_octets)
+
 
 def prefix_length_to_subnet_mask(prefix_length):   
     """
