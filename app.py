@@ -5,6 +5,7 @@ import webview
 from wildcard_mask import calculate_subnet_address_map, prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask, generate_ip_and_prefix
 from classaddress import generate_random_classful_address, calculate_classful_analysis, validate_input 
 
+
 headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
 binary_guess = pd.DataFrame(columns=['Random Decimal', 'Correct Binary', 'User Guess', 'Result'])
