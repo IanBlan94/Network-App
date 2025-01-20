@@ -109,7 +109,8 @@ def binary_to_decimal():
             # Validate the guess
             
             if user_guess == random_decimal:
-                result = f"Congratulations! You got it right!" 
+                result = f"Congratulations! You got it right!"
+                correct = f"Correct Answer: {user_guess}"
                 session['game_over'] = True
                 session['wrong_guesses'].clear
             else:
@@ -189,7 +190,7 @@ def subnet_quiz_route():
             result.append({
                 "question": key,
                 "user_answer": user_answer,
-                "correct_answer": correct_answer if not is_correct else None,
+                "correct_answer": correct_answer,
                 "correct": is_correct
             })
 

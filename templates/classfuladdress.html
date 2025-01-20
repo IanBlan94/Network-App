@@ -54,7 +54,7 @@
                                     <input 
                                         type="{% if key == 'Native Address Class' or key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
                                         name="{{ key }}"
-                                        {% if key == "Native Address Class" %}
+                                        {% if key == "Address Class" %}
                                             placeholder="Enter an integer (0-255)"
                                             min="0"
                                             max="255"
@@ -74,6 +74,7 @@
                                             <div class="result-row">
                                                 {% if result.correct %}
                                                     <span style="color: #086555;">✓ Correct</span>
+                                                    <span>(Correct Answer: {{ result.correct_answer }})</span>
                                                 {% else %}
                                                     <span style="color: #D81B60;">✗ Incorrect</span>
                                                     {% if result.validation_error %}

@@ -35,7 +35,7 @@
                 <img src="{{ url_for('static', filename='images/sword_trojan.png') }}" alt="ax trojan">
             </div>
             <div class="text">
-                <h1>Subnet Quiz</h1>
+                <h1>Address Map & Masks</h1>
                 <div class="userValue">
                     <form method="POST">
                         <p>{{question}}</p>
@@ -65,6 +65,7 @@
                                         <div class="result-row">
                                             {% if result.correct %}
                                                 <span style="color: #086555;">✓ Correct</span>
+                                                <span>(Correct Answer: {{ result.correct_answer }})</span>
                                             {% else %}
                                                 <span style="color: #D81B60;">✗ Incorrect</span>
                                                 <span>(Correct Answer: {{ result.correct_answer }})</span>

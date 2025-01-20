@@ -93,9 +93,9 @@ def calculate_classful_analysis(ip, default_mask, cidr_prefix):
         native_address_map = "Invalid Address Class"
 
     return {
-        "Native Address Class": network.network_address.exploded.split(".")[0],
-        "Native Address Map": native_address_map,
+        "Address Class": network.network_address.exploded.split(".")[0],
         "Leading Bit Pattern": leading_bit_pattern,
+        "Native Address Map": native_address_map,
         "Subnet Mask (SNM)": str(network.netmask),
         "Wildcard Mask (WCM)": str(network.hostmask)
     }
