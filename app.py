@@ -38,7 +38,9 @@ def decimal_to_binary():
         random_binary = session.get('random_binary')
         random_decimal = session.get('random_decimal')
 
+    # Default result for initial load
     result = None  # Default result for initial load
+    correct = None
 
     # Process the form submission (POST request)
     if request.method == 'POST':
@@ -52,6 +54,7 @@ def decimal_to_binary():
             # Validate the guess
             if user_guess == random_binary:
                 result = f"Congratulations! You got it right!" 
+                correct = f"Correct Answer: {user_guess}"
                 session['game_over'] = True
                 session['wrong_guesses'].clear
             else:
@@ -77,6 +80,7 @@ def decimal_to_binary():
                            random_decimal=random_decimal, 
                            random_binary=session.get('random_binary'),
                            result=result, 
+                           correct=correct, 
                            headers=headers, game_over=session['game_over'],
                            wrong_guesses=session.get('wrong_guesses', []))
 
