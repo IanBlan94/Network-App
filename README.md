@@ -16,12 +16,17 @@ Each module allows up to 3 attempts per question, with results stored in CSV fil
 ### Prerequisites
 - **Python Packages**: Install Flask and pandas:
   ```bash
-  pip install flask pandas
+  python3 -m pip install --upgrade pip
+  sudo apt-get update
+  sudo apt-get install python3-dev python3-pip python3-setuptools libgtk-3-dev webkit2gtk-4.0-dev
+  pip install --no-cache-dir pywebview
+  pip install flask pandas webview
 
 ### Ensure these files exist:
     -app.py
-    -templates/ (HTML files: main.html, -decimaltobinary.html, binarytodecimal.html,wildcardmask.html)
-    -wildcard_mask.py (for subnet quiz)
+    -templates/ (HTML files: main.html, decimaltobinary.html, binarytodecimal.html, classfuladdress.html, wildcardmask.html)
+    -classaddress.py (classful address analysis quiz)
+    -wildcard_mask.py (subnet quiz)
     -questions.csv (subnet quiz questions)
 
 ### Run the App:
