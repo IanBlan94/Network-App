@@ -50,9 +50,8 @@
                             <div class="question-container">
                                 <div class="question-row">
                                     <label class="question-text">{{ key }}: </label>
-                                     <!-- exception handling for user's inputs -->
                                     <input 
-                                        type="{% if key == 'Address Class' %}text{% elif key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
+                                        type="{% if key == 'Address Class' %}text{% elif key == 'Leading Bit Pattern' %}text{% else %}text{% endif %}"
                                         name="{{ key }}"
                                         {% if key == "Address Class" %}
                                             pattern="[AaBbCcDdEe]"
@@ -60,7 +59,7 @@
                                             title="Please enter a single letter: A, B, C, D, or E"
                                             placeholder="Enter A, B, C, D, or E"
                                         {% elif key == "Leading Bit Pattern" %}
-                                            placeholder="Enter binary pattern"
+                                            placeholder="Enter binary pattern (0, 10, or 110)"
                                         {% elif key == "Native Address Map" %}
                                             placeholder="Format: xxx.xxx.H.H"
                                         {% elif key == "Subnet Mask (SNM)" or key == "Wildcard Mask (WCM)" %}
@@ -68,26 +67,44 @@
                                         {% endif %}
                                         required
                                     >
+                                    {% if results %}
+                                        {% for result in results %}
+                                            {% if result.question == key %}
+                                                <div class="answers-inline">
+                                                    <div class="answer-pair">
+                                                        <span class="answer-label">Your Answer:</span>
+                                                        <span class="answer-value {% if not result.correct %}incorrect-value{% endif %}">
+                                                            {{ result.user_answer }}
+                                                        </span>
+                                                    </div>
+                                                    <div class="answer-pair">
+                                                        <span class="answer-label">Correct Answer:</span>
+                                                        <span class="answer-value correct-value">
+                                                            {{ result.correct_answer }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
                                 </div>
                                 {% if results %}
                                     {% for result in results %}
                                         {% if result.question == key %}
                                             <div class="result-row">
-                                                {% if result.correct %}
-                                                    <span style="color: #086555;">✓ Correct</span>
-                                                    <span>(Correct Answer: {{ result.correct_answer }})</span>
-                                                {% else %}
-                                                    <span style="color: #D81B60;">✗ Incorrect</span>
-                                                    {% if result.validation_error %}
-                                                        <span style="color: #D81B60;">Invalid format. Please check input requirements.</span>
-                                                    {% endif %}
-                                                    <span>(Correct Answer: {{ result.correct_answer }})</span>
+                                                <div class="status-indicator {% if result.correct %}correct{% else %}incorrect{% endif %}">
+                                                    {{ '✓ Correct!' if result.correct else '✗ Incorrect' }}
+                                                </div>
+                                                {% if result.validation_error %}
+                                                    <span style="color: #D81B60; font-size: 14px;">
+                                                        Invalid format. Please check input requirements.
+                                                    </span>
                                                 {% endif %}
                                             </div>
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
-                            </div>
+                                </div>
                             {% endfor %}
 
                             {% if not results %}
