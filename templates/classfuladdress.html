@@ -52,14 +52,15 @@
                                     <label class="question-text">{{ key }}: </label>
                                      <!-- exception handling for user's inputs -->
                                     <input 
-                                        type="{% if key == 'Native Address Class' or key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
+                                        type="{% if key == 'Address Class' %}text{% elif key == 'Leading Bit Pattern' %}number{% else %}text{% endif %}"
                                         name="{{ key }}"
                                         {% if key == "Address Class" %}
-                                            placeholder="Enter an integer (0-255)"
-                                            min="0"
-                                            max="255"
+                                            pattern="[AaBbCcDdEe]"
+                                            maxlength="1"
+                                            title="Please enter a single letter: A, B, C, D, or E"
+                                            placeholder="Enter A, B, C, D, or E"
                                         {% elif key == "Leading Bit Pattern" %}
-                                            placeholder="Enter an integer"
+                                            placeholder="Enter binary pattern"
                                         {% elif key == "Native Address Map" %}
                                             placeholder="Format: xxx.xxx.H.H"
                                         {% elif key == "Subnet Mask (SNM)" or key == "Wildcard Mask (WCM)" %}
