@@ -110,19 +110,13 @@
                             {% if not results %}
                             <div class="button-group">
                                 <button class="submitBtn" type="submit">Check All</button>
-                                <form method="GET" action="{{ url_for('main') }}">
-                                    <button type="submit" class="homeBtn">Return Home</button>
-                                </form>
+                                <a href="{{ url_for('main') }}" class="homeBtn">Return Home</a>
                             </div>
                             {% else %}
-                                <div class="alignBtns">
-                                    <form method="GET"> 
-                                        <button class="submitBtn" style="color: white;"><a  href="{{ url_for('classful_quiz') }}">New Challenge</a></button>
-                                    </form>
-                                    <form method="GET" action="{{ url_for('main') }}">
-                                        <button type="submit" class="homeBtn">Return Home</button>
-                                    </form>
-                                </div>
+                            <div class="alignBtns">
+                                <a href="{{ url_for('classful_quiz') }}" class="submitBtn">New Challenge</a>
+                                <a href="{{ url_for('main') }}" class="homeBtn">Return Home</a>
+                            </div>
                         {% endif %}
                         </form>    
                     </div>

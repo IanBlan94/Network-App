@@ -141,14 +141,27 @@
     color: white;
 }
 .submitBtn{
-    background-color: #1E88E5; 
-    color: white;
-    border-radius: 5px; 
+    background-color: #1E88E5;
 }
 .submitBtn a{
     background-color: #1E88E5; 
     color: white;
     border-radius: 5px; 
+}
+.submitBtn, .homeBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: transform 0.2s, background-color 0.2s;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+}
+.submitBtn:hover, .homeBtn:hover {
+    transform: scale(1.05);
 }
 .playBtn{
     background-color: #1E88E5; 
@@ -166,7 +179,6 @@
 }
 .homeBtn:hover{
     background-color: #A52DAD;
-    transform: scale(1.05);
 }
 .alignBtns {
     display: flex;
