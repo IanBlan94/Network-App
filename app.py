@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session # type: ignore
+from flask import Flask, render_template, request, redirect, url_for, session 
 import random
 import pandas as pd
 #import webview
@@ -10,7 +10,7 @@ headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
 binary_guess = pd.DataFrame(columns=['Random Decimal', 'Correct Binary', 'User Guess', 'Result'])
 wildcardmak_results = pd.DataFrame(columns=['Random Question, Correct Answer', 'User Guess', 'Result'])
-classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Native Address Class', 'Native Address Map', 'Subnet Mask', 'Wildcard Mask', 'User Answers', 'Correct Answers', 'Score'])
+classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Address Class', 'Native Address Map', 'Subnet Mask', 'Wildcard Mask', 'User Answers', 'Correct Answers', 'Score'])
 
 app= Flask(__name__)
 app.secret_key = 'theonekey'
@@ -38,7 +38,9 @@ def decimal_to_binary():
         random_binary = session.get('random_binary')
         random_decimal = session.get('random_decimal')
 
+    # Default result for initial load
     result = None  # Default result for initial load
+    correct = None
 
     # Process the form submission (POST request)
     if request.method == 'POST':
@@ -52,6 +54,7 @@ def decimal_to_binary():
             # Validate the guess
             if user_guess == random_binary:
                 result = f"Congratulations! You got it right!" 
+                correct = f"Correct Answer: {user_guess}"
                 session['game_over'] = True
                 session['wrong_guesses'].clear
             else:
@@ -77,6 +80,7 @@ def decimal_to_binary():
                            random_decimal=random_decimal, 
                            random_binary=session.get('random_binary'),
                            result=result, 
+                           correct=correct, 
                            headers=headers, game_over=session['game_over'],
                            wrong_guesses=session.get('wrong_guesses', []))
 
@@ -274,7 +278,7 @@ def classful_quiz():
         classful_quiz_results.loc[len(classful_quiz_results)] = {
             'IP Address': session['ip'],
             'CIDR Prefix': session['cidr_prefix'],
-            'Native Address Class': correct_answers.get('Native Address Class', ''),
+            'Address Class': correct_answers.get('Address Class', ''),
             'Native Address Map': correct_answers.get('Native Address Map', ''),
             'Leading Bit Pattern': correct_answers.get('Leading Bit Pattern', ''),
             'Subnet Mask': correct_answers.get('Subnet Mask (SNM)', ''),

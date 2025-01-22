@@ -206,7 +206,7 @@
     gap: 10px;
     outline: 2px black solid;
     padding: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 4px;
     border-radius: 10px;
 }
 .question-text { /* textbox along side question for addy analysis */
@@ -233,15 +233,106 @@ input:focus {
     margin-top: 4px;
     margin-left: 210px;
     display: flex;
-    gap: 8px;
     align-items: center;
+    gap: 8px;
 }
+
+.result-box {
+    background-color: #f8f9fa;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.status-indicator {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.status-indicator {
+    color: #086555;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.status-indicator.correct {
+    color: #086555;
+}
+
+.status-indicator.incorrect {
+    color: #D81B60;
+}
+
+.correct .status-symbol {
+    color: #086555;
+}
+
+.incorrect .status-symbol {
+    color: #D81B60;
+}
+
+.status-text {
+    font-weight: 500;
+    font-size: 16px;
+}
+
 .button-group {
     margin-top: 20px;
     display: flex;
     gap: 10px;
     justify-content: center;
 }
+
+.answers-inline {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.answer-pair {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.answers-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    background-color: white;
+    border-radius: 6px;
+}
+
+.answer-label {
+    color: #666;
+}
+
+.answer-value {
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+.correct-value {
+    background-color: #e8f5e9;
+    color: #086555;
+}
+
+.incorrect-value {
+    background-color: #fce4ec;
+    color: #D81B60;
+}
+
+.validation-error {
+    margin-top: 8px;
+    color: #D81B60;
+    font-size: 14px;
+    font-style: italic;
+}
+
 
 .button {
     padding: 8px 16px;
