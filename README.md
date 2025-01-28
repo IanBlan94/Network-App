@@ -4,8 +4,8 @@
 This Flask app helps users practice:
 1. **Decimal-to-Binary Conversion**
 2. **Binary-to-Decimal Conversion**
-3. **Classful Address Analysis**
-4. **Subnet Quiz**
+3. **Address Analysis**
+4. **Address Map & Masks**
 
 Each module allows up to 3 attempts per question, with results stored in CSV files.
 

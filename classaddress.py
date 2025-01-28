@@ -85,15 +85,15 @@ def calculate_classful_analysis(ip, default_mask, cidr_prefix):
     first_octet = int(octets[0])
     if 1 <= first_octet <= 126:  # Class A
         leading_bit_pattern = "0"
-        native_address_map = f"{first_octet}.H.H.H"
+        native_address_map = f"N.H.H.H"
         address_class = "A"
     elif 128 <= first_octet <= 191:  # Class B
         leading_bit_pattern = "10"
-        native_address_map = f"{first_octet}.{octets[1]}.H.H"
+        native_address_map = f"N.N.H.H"
         address_class = "B"
     elif 192 <= first_octet <= 223:  # Class C
         leading_bit_pattern = "110"
-        native_address_map = f"{first_octet}.{octets[1]}.{octets[2]}.H"
+        native_address_map = f"N.N.N.H"
         address_class = "C"
     else:
         leading_bit_pattern = "Unknown"
@@ -110,52 +110,56 @@ def calculate_classful_analysis(ip, default_mask, cidr_prefix):
 
 def validate_input(key, value):
     """
-    Validate user input based on the question type
-
+    Validate user input based on the question type with case sensitivity
+    
     Args:
         key: The type of input being validated
         value: The user's input value
-
+        
     Returns:
         bool: Whether the input is valid
-
+        
     Examples:
-        >>> validate_input('Native Address Map', '211.17.48.H')
+        >>> validate_input('Address Class', 'C')
         True
-        >>> validate_input('Native Address Map', '211.H.H.H')
+        >>> validate_input('Address Class', 'c')
+        False
+        >>> validate_input('Native Address Map', 'N.N.N.H')
+        True
+        >>> validate_input('Native Address Map', 'n.n.n.h')
         False
     """
     if key == "Address Class":
-        # Must be one of A, B, C, D, or E (case-insensitive)
-        return value.upper() in ['A', 'B', 'C', 'D', 'E']
+        # Must be one of A, B, C, D, or E (case-sensitive)
+        return value in ['A', 'B', 'C', 'D', 'E']
     
     elif key == "Native Address Map":
-        # Must match format like 211.17.48.H for class C
-        return re.match(r'^\d+\.\d+\.\d+\.H$', value) is not None or \
-               re.match(r'^\d+\.\d+\.H\.H$', value) is not None or \
-               re.match(r'^\d+\.H\.H\.H$', value) is not None
+        # Check if any lowercase n or h is present
+        if 'n' in value or 'h' in value:
+            return False
+            
+        # Must match format like N.N.N.H for class C (case-sensitive)
+        return (re.match(r'^N\.N\.N\.H$', value) is not None) or \
+               (re.match(r'^\d+\.\d+\.\d+\.H$', value) is not None) or \
+               (re.match(r'^N\.N\.H\.H$', value) is not None) or \
+               (re.match(r'^\d+\.\d+\.H\.H$', value) is not None) or \
+               (re.match(r'^N\.H\.H\.H$', value) is not None) or \
+               (re.match(r'^\d+\.H\.H\.H$', value) is not None)
     
     elif key == "Leading Bit Pattern":
         # Must be one of the valid binary patterns: 0, 10, or 110
         return value in ['0', '10', '110']
     
-    elif key == "Subnet Mask (SNM)":
+    elif key == "Subnet Mask (SNM)" or key == "Wildcard Mask (WCM)":
         try:
             octets = list(map(int, value.split(".")))
             if len(octets) != 4 or not all(0 <= octet <= 255 for octet in octets):
                 return False
             mask_binary = "".join(f"{octet:08b}" for octet in octets)
-            return re.match(r"^1*0*$", mask_binary) is not None
-        except ValueError:
-            return False
-    
-    elif key == "Wildcard Mask (WCM)":
-        try:
-            octets = list(map(int, value.split(".")))
-            if len(octets) != 4 or not all(0 <= octet <= 255 for octet in octets):
-                return False
-            mask_binary = "".join(f"{octet:08b}" for octet in octets)
-            return re.match(r"^0*1*$", mask_binary) is not None
+            if key == "Subnet Mask (SNM)":
+                return re.match(r"^1*0*$", mask_binary) is not None
+            else:  # Wildcard Mask
+                return re.match(r"^0*1*$", mask_binary) is not None
         except ValueError:
             return False
             
