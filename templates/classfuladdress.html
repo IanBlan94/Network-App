@@ -51,19 +51,21 @@
                                 <div class="question-row">
                                     <label class="question-text">{{ key }}: </label>
                                     <input 
-                                        type="{% if key == 'Address Class' %}text{% elif key == 'Leading Bit Pattern' %}text{% else %}text{% endif %}"
+                                        type="text"
                                         name="{{ key }}"
                                         {% if key == "Address Class" %}
-                                            pattern="[AaBbCcDdEe]"
+                                            pattern="[ABCDE]"
                                             maxlength="1"
-                                            title="Please enter a single letter: A, B, C, D, or E"
-                                            placeholder="Enter A, B, C, D, or E"
+                                            title="Please enter a single UPPERCASE letter: A, B, C, D, or E"
+                                            placeholder="Enter A, B, C, D, or E (UPPERCASE)"
+                                        {% elif key == "Native Address Map" %}
+                                            pattern="(N\.N\.N\.H|N\.N\.H\.H|N\.H\.H\.H|\d+\.\d+\.\d+\.H|\d+\.\d+\.H\.H|\d+\.H\.H\.H)"
+                                            title="Please use UPPERCASE letters: i.e. N.N.N.H"
+                                            placeholder="Format: W.X.Y.Z (UPPERCASE)"
                                         {% elif key == "Leading Bit Pattern" %}
                                             placeholder="Enter binary pattern (0, 10, or 110)"
-                                        {% elif key == "Native Address Map" %}
-                                            placeholder="Format: xxx.xxx.H.H"
                                         {% elif key == "Subnet Mask (SNM)" or key == "Wildcard Mask (WCM)" %}
-                                            placeholder="Format: xxx.xxx.xxx.xxx"
+                                            placeholder="Format: Dotted Decimal Notation"
                                         {% endif %}
                                         required
                                     >
