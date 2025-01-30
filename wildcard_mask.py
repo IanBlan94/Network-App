@@ -49,35 +49,61 @@ def generate_ip_and_prefix():
         
         return ip, prefix_length
 
-def calculate_subnet_address_map(ip, prefix_length):
+def calculate_subnet_address_map(ip_address: str, prefix: int) -> str:
     """
-    Calculate the Subnet Address Map (SAM) for a given IP and prefix length.
-
-    Args:
-        ip (str): The IP address.
-        prefix_length (int): The prefix length.
-
-    Returns:
-        str: SAM with N/H per octet (e.g., "N.N.N.H").
-    """
-    sam_octets = []
-    for i in range(0, 32, 8):
-        # Calculate bits in the current octet
-        network_bits = max(0, min(8, prefix_length - i))
-        host_bits = 8 - network_bits
-
-        if network_bits == 8:  # All network bits
-            sam_octets.append('N')
-        elif host_bits == 8:  # All host bits
-            sam_octets.append('H')
-        else:  # Mixed case
-            # Host dominance: majority bits are host
-            if host_bits > network_bits:
-                sam_octets.append('H')
-            else:
-                sam_octets.append('S')
+    Generate a subnet address map maintaining octet boundaries with dots.
     
-    return '.'.join(sam_octets)
+    Args:
+        ip_address (str): IP address (e.g., '132.71.157.140')
+        prefix (int): CIDR prefix length (e.g., 28)
+        
+    Returns:
+        str: Subnet address map with proper octet boundaries
+    """
+    # Determine IP class based on first octet
+    first_octet = int(ip_address.split('.')[0])
+    
+    if 192 <= first_octet <= 223:  # Class C
+        default_network_bits = 24
+        format_template = "N.N.N."
+        subnet_start_octet = 4
+    elif 128 <= first_octet <= 191:  # Class B
+        default_network_bits = 16
+        format_template = "N.N."
+        subnet_start_octet = 3
+    elif 1 <= first_octet <= 126:  # Class A
+        default_network_bits = 8
+        format_template = "N."
+        subnet_start_octet = 2
+    else:
+        raise ValueError("IP address is not in class A, B, or C range")
+    
+    # Calculate subnet and host bits
+    subnet_bits = prefix - default_network_bits
+    host_bits = 32 - prefix
+    
+    if subnet_bits < 0:
+        raise ValueError("Invalid prefix for this IP class")
+    
+    # Build the remaining octets
+    result = format_template
+    remaining_subnet_bits = subnet_bits
+    remaining_host_bits = host_bits
+    
+    for octet in range(subnet_start_octet, 5):
+        if octet > subnet_start_octet:
+            result += "."
+            
+        bits_in_this_octet = 8
+        subnet_bits_here = min(remaining_subnet_bits, bits_in_this_octet)
+        remaining_subnet_bits -= subnet_bits_here
+        
+        host_bits_here = min(remaining_host_bits, bits_in_this_octet - subnet_bits_here)
+        remaining_host_bits -= host_bits_here
+        
+        result += "s" * subnet_bits_here + "h" * host_bits_here
+        
+    return result
 
 
 def prefix_length_to_subnet_mask(prefix_length):   
