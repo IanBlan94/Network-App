@@ -1,0 +1,139 @@
+/* 
+Color-blind friendly colors for users
+@amyxg
+*/
+
+:root {
+    /* Primary colors that work well for most types of color blindness */
+    --primary-blue: #0072B2;      /* Clear blue - distinguishable in most color blindness types */
+    --primary-orange: #E69F00;    /* Clear orange - distinguishable from blue for deuteranopes */
+    --primary-teal: #009E73;      /* Teal - distinct from both orange and blue */
+    --primary-magenta: #CC79A7;   /* Magenta - distinguishable for most color vision types */
+    
+    /* Background and text colors with sufficient contrast */
+    --light-bg: #F5F5F5;
+    --dark-bg: #222222;
+    --light-text: #F5F5F5;
+    --dark-text: #222222;
+    
+    /* Feedback colors (status indicators) */
+    --success: #009E73;           /* Teal - distinguishable for protanopes and deuteranopes */
+    --error: #D55E00;             /* Vermillion - distinguishable for tritanopes */
+    --warning: #0072B2;           /* Blue - distinguishable from both success and error */
+    --info: #E69F00;              /* Orange - distinguishable from other indicators */
+    
+    /* Interactive element states */
+    --link: #0072B2;              /* Blue for links */
+    --link-hover: #56B4E9;        /* Lighter blue for hover state - with clear difference */
+    --link-visited: #9E2767;      /* Purple for visited - distinguishable from unvisited */
+    
+    /* Button colors */
+    --button-primary: #0072B2;    /* Blue primary button */
+    --button-secondary: #009E73;  /* Teal secondary button */
+    --button-alt: #D55E00;        /* Vermillion alternative button */
+}
+
+/* Apply colorblind-friendly styles */
+
+/* Links */
+a {
+    color: var(--link);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover, a:focus {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+a:visited {
+    color: var(--link-visited);
+}
+
+/* Specifically for the navigation links */
+.left-bar nav ul li a {
+    color: var(--link);
+    text-decoration: none;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.left-bar nav ul li a:hover, 
+.left-bar nav ul li a:focus {
+    color: var(--link-hover);
+    transform: scale(1.05);
+}
+
+/* Button styles */
+.submitBtn, .playBtn {
+    background-color: var(--button-primary);
+    color: var(--light-text);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.submitBtn:hover, .playBtn:hover,
+.submitBtn:focus, .playBtn:focus {
+    background-color: var(--link-hover);
+    transform: scale(1.05);
+}
+
+.homeBtn {
+    background-color: var(--button-secondary);
+    color: var(--light-text);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.homeBtn:hover, .homeBtn:focus {
+    background-color: var(--primary-teal);
+    filter: brightness(1.2);
+    transform: scale(1.05);
+}
+
+/* Status colors */
+.correct {
+    color: var(--success);
+}
+
+.incorrect {
+    color: var(--error);
+}
+
+.correct-value {
+    background-color: var(--success);
+    color: var(--light-text);
+}
+
+.incorrect-value {
+    background-color: var(--error);
+    color: var(--light-text);
+}
+
+/* Menu links in numlist */
+.numlist li a {
+    color: var(--link);
+    transition: color 0.2s ease;
+}
+
+.numlist li a:hover,
+.numlist li a:focus {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Enhanced focus states for accessibility */
+a:focus, button:focus, input:focus {
+    outline: 3px solid var(--link-hover);
+    outline-offset: 2px;
+}
+
+/* Color adjustments for dark mode */
+.dark-mode {
+    --link: #56B4E9;              /* Lighter blue for links in dark mode */
+    --link-hover: #0072B2;        /* Darker blue for hover state */
+    --link-visited: #CC79A7;      /* Brighter magenta for visited in dark mode */
+    
+    --button-primary: #56B4E9;    /* Lighter blue primary button */
+    --button-secondary: #009E73;  /* Keep teal secondary button */
+    --button-alt: #E69F00;        /* Orange alternative button */
+}

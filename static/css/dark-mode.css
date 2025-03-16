@@ -1,0 +1,262 @@
+/* dark-mode.css - Updated with colorblind-friendly colors */
+:root {
+    --bg-color: #ffffff;
+    --text-color: rgba(0,0,0,.87);
+    --header-bg: #ffffff;
+    --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.207), 0 2px 2px rgba(0, 0, 0, 0.207);
+    --container-bg: #ffffff;
+    --border-color: #000000;
+    
+    /* Colorblind-friendly colors */
+    --link-color: #0072B2;        /* Blue - distinguishable in most color blindness types */
+    --link-hover: #56B4E9;        /* Lighter blue - clear difference from link color */
+    
+    --button-bg-blue: #0072B2;    /* Blue primary button */
+    --button-bg-purple: #009E73;  /* Teal secondary button - better than purple */
+    --button-text: white;
+    
+    --input-border: #ddd;
+    --input-focus: #0072B2;
+    --table-header-bg: #f2f2f2;
+    
+    /* Status colors */
+    --correct-color: #009E73;     /* Teal - distinguishable for protanopes and deuteranopes */
+    --incorrect-color: #D55E00;   /* Vermillion - distinguishable for tritanopes */
+    --correct-bg: #E8F5E9;        /* Light green background */
+    --incorrect-bg: #FFEBEE;      /* Light red background */
+    
+    --result-box-bg: #f8f9fa;
+}
+
+/* Apply dark mode to both html and body elements */
+html.dark-mode,
+body.dark-mode,
+.dark-mode {
+    /* Dark mode colors */
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --header-bg: #1e1e1e;
+    --header-shadow: 0 1px 3px rgba(255, 255, 255, 0.1), 0 2px 2px rgba(255, 255, 255, 0.1);
+    --container-bg: #1e1e1e;
+    --border-color: #555555;
+    
+    /* Colorblind-friendly colors for dark mode */
+    --link-color: #56B4E9;        /* Lighter blue for links in dark mode */
+    --link-hover: #90CAF9;        /* Even lighter blue for hover in dark mode */
+    
+    --button-bg-blue: #0072B2;    /* Blue primary button */
+    --button-bg-purple: #009E73;  /* Teal secondary button */
+    --button-text: #f5f5f5;
+    
+    --input-border: #444444;
+    --input-focus: #56B4E9;
+    --table-header-bg: #2c2c2c;
+    
+    /* Status colors for dark mode */
+    --correct-color: #00BFA5;     /* Brighter teal for dark mode */
+    --incorrect-color: #FF7043;   /* Brighter vermillion for dark mode */
+    --correct-bg: #1B5E20;        /* Darker green background */
+    --incorrect-bg: #C62828;      /* Darker red background */
+    
+    --result-box-bg: #2c2c2c;
+}
+
+/* Base elements */
+html {
+    background-color: var(--bg-color);
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header styling */
+.header {
+    background-color: var(--header-bg);
+    box-shadow: var(--header-shadow);
+}
+
+.left-bar nav ul li a {
+    color: var(--link-color);
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.left-bar nav ul li a:hover,
+.left-bar nav ul li a:focus {
+    color: var(--link-hover);
+    transform: scale(1.05);
+}
+
+/* Main content styling */
+.main-container {
+    background-color: var(--container-bg);
+    box-shadow: var(--header-shadow);
+}
+
+.section .text {
+    background-color: var(--container-bg);
+}
+
+.text h1, .text p, .text li {
+    color: var(--text-color);
+}
+
+.numlist li a {
+    color: var(--link-color);
+    transition: color 0.2s ease;
+}
+
+.numlist li a:hover,
+.numlist li a:focus {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* Table styling */
+.bin_dec_table th {
+    border: 1px solid var(--border-color);
+    background-color: var(--table-header-bg);
+    color: var(--text-color);
+}
+
+.bin_dec_table td {
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+/* Question and input styling */
+.question {
+    outline: 2px solid var(--border-color);
+}
+
+.question-row {
+    outline: 2px solid var(--border-color);
+}
+
+.question-text {
+    color: var(--text-color);
+}
+
+input {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+}
+
+input:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(0, 114, 178, 0.2);
+    outline: none;
+}
+
+/* Result styling */
+.result-box {
+    background-color: var(--result-box-bg);
+    border: 2px solid var(--border-color);
+}
+
+.correct {
+    color: var(--correct-color);
+}
+
+.incorrect {
+    color: var(--incorrect-color);
+}
+
+.correct-value {
+    background-color: var(--correct-bg);
+    color: var(--text-color);
+}
+
+.incorrect-value {
+    background-color: var(--incorrect-bg);
+    color: var(--text-color);
+}
+
+/* Button styling */
+.submitBtn, .playBtn {
+    background-color: var(--button-bg-blue);
+    color: var(--button-text);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.submitBtn:hover, .playBtn:hover,
+.submitBtn:focus, .playBtn:focus {
+    background-color: var(--link-hover);
+    transform: scale(1.05);
+}
+
+.homeBtn {
+    background-color: var(--button-bg-purple);
+    color: var(--button-text);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.homeBtn:hover, .homeBtn:focus {
+    filter: brightness(1.2);
+    transform: scale(1.05);
+}
+
+/* Enhanced focus states for accessibility */
+a:focus, button:focus, input:focus {
+    outline: 3px solid var(--link-hover);
+    outline-offset: 2px;
+}
+
+/* Theme switch toggle */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 50px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 16px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 16px;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--button-bg-blue);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.theme-switch-wrapper .label {
+    margin-left: 10px;
+    font-size: 14px;
+}
