@@ -355,3 +355,31 @@ input:focus {
     cursor: pointer;
     text-decoration: none;
 }
+.login-container {
+    background-color: var(--text-light);
+    height: 100vh;
+    display: flex;
+  }
+
+.form-container {
+    background-color: #e5f3fd;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    max-width: 400px;
+    
+    /* Centering with position and transform */
+    position: fixed;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .form-container h1 {
+    text-align: center;
+    color: #2a9df4;
+    margin-bottom: 1rem;
+  }
+
