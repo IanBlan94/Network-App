@@ -1,46 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% extends "base.html" %}
 
-    <title>User Registration Page</title>
-</head>
-<body>
-    <div class="login-container">
-        <div class="form-container">
-            <div class="login-form">
-                <h1 id="welcome-notice">New User Registration</h1>
-                <form class="login-input" method="POST" action="{{ url_for('registration') }}">
-                    <input
-                    required
-                    name="username"
-                    id="username"
-                    type="text"
-                    placeholder="Email"
-                    class="form-control"
-                    >
-                    <input
-                    required
-                    name="password"
-                    id="password"
-                    type="password"
-                    placeholder="Password"
-                    class="form-control"
-                    >
-                    <div>
-                        <button class="login-button" id="submit">Register</button>
-                    </div>
-                </form>
-            </div>
+{% block title %}NetQuizzer - Register Account{% endblock %}
+
+{% block show_header %}
+<!-- Hide header but add dark mode toggle -->
+<div class="auth-toggle-container">
+    <div class="theme-switch-wrapper">
+        <label class="theme-switch" for="checkbox">
+            <input type="checkbox" id="checkbox" />
+            <div class="slider"></div>
+        </label>
+        <div class="label">Dark Mode</div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/loginRegis.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form-container">
+        <div class="auth-header">
+            <h1>Create Account</h1>
+            <p>Join NetQuizzer and start learning today</p>
+        </div>
         
-        <div id="sign-up">
-            <a href="{{url_for('login')}}">Already have an account? Log in here!</a>
-
+        <div class="auth-form">
+            <div class="auth-logo">
+                <a href="{{ url_for('main') }}">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="NetQuizzer Logo">
+                </a>
+            </div>
+            
+            <form method="POST" action="{{ url_for('registration') }}">
+                <div class="form-group">
+                    <label for="username">Email</label>
+                    <input required name="username" id="username" type="email" placeholder="yourname@example.com" class="form-control" aria-label="Email address">
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input required name="password" id="password" type="password" placeholder="Create a strong password" class="form-control" aria-label="Password">
+                </div>
+                
+                <button type="submit" class="auth-button">Register Account</button>
+            </form>
+        </div>
+        
+        <div class="auth-links">
+            <a href="{{ url_for('login') }}">Already have an account? Log in here!</a>
+            <a href="{{ url_for('main') }}">Return to Home Page</a>
         </div>
     </div>
-
-    </div>
-</body>
-</html>
+</div>
+{% endblock %}

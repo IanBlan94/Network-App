@@ -29,6 +29,7 @@
   </head>
   <body>
       <!-- header for page -->
+      {% block show_header %}
       <header>
           <div class="header">
               <div class="header-container">
@@ -42,6 +43,19 @@
                               <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
                               <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
                               <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
+                              <li>
+                                <a>{% if username %}
+                                    <div>
+                                        {% if user[2] %}
+                                            <img src="{{ url_for('static', filename='uploads/' + user[2]) }}" alt="Profile Picture" class="profile-img">
+                                        {% endif %}
+                                        <a href="{{url_for('logout')}}" >Logout</a>
+                                    </div>
+                                {% else %}
+                                    <a href="{{url_for('login')}}">Login</a>
+                                {% endif %}
+                                </a>
+                            </li>
                           </ul>
                       </nav>
                   </div>
@@ -57,7 +71,7 @@
               </div>
           </div>
       </header>
-      
+      {% endblock %}
       <!-- main body elements -->
       <main>
           {% block content %}{% endblock %}
@@ -67,5 +81,8 @@
       <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
       <!-- Page-specific JavaScript -->
       {% block extra_js %}{% endblock %}
+
+      <!-- Voice Flow chat widget -->
+    {% block custom_scripts %}{% endblock %}
   </body>
   </html>

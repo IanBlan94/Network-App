@@ -1,53 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetQuizzer</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
-    <!-- links for reference -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% extends "base.html" %}
 
-</head>
-<body>
-    <!-- header for page -->
-    <header>
-        <div class="header">
-            <div class="header-container">
-                <div class="left-bar">
-                    <div class="logo">
-                        <a href="{{ url_for('main') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
-                    </div>
-                    <nav>
-                        <ul>
-                            <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
-                            <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
-                            <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
-                            <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
-                            <li>
-                                <a>{% if username %}
-                                    <div>
-                                        {% if user[2] %}
-                                            <img src="{{ url_for('static', filename='uploads/' + user[2]) }}" alt="Profile Picture" class="profile-img">
-                                        {% endif %}
-                                        <a href="{{url_for('logout')}}" >Logout</a>
-                                    </div>
-                                {% else %}
-                                    <a href="{{url_for('login')}}">Login</a>
-                                {% endif %}
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </header>
+{% block title %}NetQuizzer - Network Learning Made Fun{% endblock %}
 
+{% block content %}
     <!-- main body elements -->
-    <main>
         <div class="main-container">
             <section class="first section">
                 <div class="image">
@@ -127,21 +83,22 @@
                 </div>
             </section>
         </div>
-    </main>
-    <script type="text/javascript">
-        (function(d, t) {
-            var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
-            v.onload = function() {
-              window.voiceflow.chat.load({
-                verify: { projectID: '67a38b89ad8e9127157757b2' },
-                url: 'https://general-runtime.voiceflow.com',
-                versionID: 'production'
-              });
-            }
-            v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
-        })(document, 'script');
-      </script>
-</body>
-</html>
+        {% endblock %}
+
+        {% block custom_scripts %}
+        <script type="text/javascript">
+            (function(d, t) {
+                var v = d.createElement(t), s = d.getElementsByTagName(t)[0];
+                v.onload = function() {
+                  window.voiceflow.chat.load({
+                    verify: { projectID: '67a38b89ad8e9127157757b2' },
+                    url: 'https://general-runtime.voiceflow.com',
+                    versionID: 'production'
+                  });
+                }
+                v.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs"; v.type = "text/javascript"; s.parentNode.insertBefore(v, s);
+            })(document, 'script');
+        </script>
+        {% endblock %}
 
 

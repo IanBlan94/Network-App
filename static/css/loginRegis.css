@@ -1,0 +1,210 @@
+/* Login and Registration Page Styles with Colorblind-Friendly Colors */
+body {
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+}
+
+/* Use the colorblind-friendly variable definitions from dark-mode.css */
+:root {
+    /* Redefining just to be explicit, these should match your dark-mode.css */
+    --login-primary: #0072B2;      /* Blue - distinguishable in most color blindness types */
+    --login-hover: #56B4E9;        /* Lighter blue - clear difference */
+    --register-primary: #009E73;   /* Teal - distinguishable for protanopes and deuteranopes */
+    --register-hover: #00B185;     /* Slightly lighter teal */
+}
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.auth-form-container {
+    width: 100%;
+    max-width: 450px;
+    background-color: var(--container-bg);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-form-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+}
+
+.auth-header {
+    background-color: var(--login-primary);
+    color: white;
+    padding: 25px 30px;
+    text-align: center;
+    border-radius: 10px 10px 0 0;
+}
+
+/* Different color for registration page */
+.auth-form-container:has(form[action*="registration"]) .auth-header {
+    background-color: var(--register-primary);
+}
+
+.auth-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.auth-header p {
+    margin: 10px 0 0;
+    opacity: 0.9;
+    font-size: 16px;
+}
+
+.auth-form {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--login-primary);
+    box-shadow: 0 0 0 3px rgba(0, 114, 178, 0.15);
+    outline: none;
+}
+
+/* Different focus color for registration inputs */
+.auth-form-container:has(form[action*="registration"]) .form-control:focus {
+    border-color: var(--register-primary);
+    box-shadow: 0 0 0 3px rgba(0, 158, 115, 0.15);
+}
+
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    background-color: var(--login-primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Different button color for registration */
+.auth-form-container:has(form[action*="registration"]) .auth-button {
+    background-color: var(--register-primary);
+}
+
+.auth-button:hover {
+    background-color: var(--login-hover);
+    transform: translateY(-2px);
+}
+
+/* Different hover color for registration button */
+.auth-form-container:has(form[action*="registration"]) .auth-button:hover {
+    background-color: var(--register-hover);
+}
+
+.auth-button:active {
+    transform: translateY(0);
+}
+
+.auth-links {
+    margin-top: 25px;
+    text-align: center;
+    padding: 0 30px 25px;
+}
+
+.auth-links a {
+    display: block;
+    color: var(--link-color);
+    text-decoration: none;
+    margin: 10px 0;
+    font-size: 15px;
+    transition: color 0.2s ease;
+}
+
+.auth-links a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+.auth-logo {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-logo img {
+    height: 60px;
+    width: auto;
+}
+
+/* Dark mode specific adjustments */
+.dark-mode .auth-form-container {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode toggle positioning */
+.auth-toggle-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.auth-toggle-container .theme-switch-wrapper {
+    background-color: var(--container-bg);
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced focus states for accessibility */
+a:focus, button:focus, input:focus {
+    outline: 3px solid var(--link-hover);
+    outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    .auth-form-container {
+        max-width: 100%;
+    }
+    
+    .auth-header {
+        padding: 20px;
+    }
+    
+    .auth-form,
+    .auth-links {
+        padding: 20px;
+    }
+    
+    .auth-toggle-container {
+        top: 10px;
+        right: 10px;
+    }
+}
