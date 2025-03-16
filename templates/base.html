@@ -1,0 +1,65 @@
+  <!-- 
+   use this html as a base foundation for all links if needed
+   @amyxg
+  
+  
+  -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}TITLE-TEST{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
+    <!-- Common CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dark-mode.css') }}">
+    <!-- Page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- header for page -->
+    <header>
+        <div class="header">
+            <div class="header-container">
+                <div class="left-bar">
+                    <div class="logo">
+                        <a href="{{ url_for('main') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
+                    </div>
+                    <nav>
+                        <ul>
+                            <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
+                            <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
+                            <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
+                            <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                
+                <!-- Dark Mode Toggle -->
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider"></div>
+                    </label>
+                    <div class="label">Dark Mode</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- main body elements -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Common JavaScript -->
+    <script src="{{ url_for('static', filename='js/dark-mode.js') }}"></script>
+    <!-- Page-specific JavaScript -->
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

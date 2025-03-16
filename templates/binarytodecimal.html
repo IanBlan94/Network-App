@@ -1,121 +1,85 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetQuizzer</title>
-    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
-    <!-- links for reference -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+{% extends "base.html" %}
 
-</head>
-<body>
-    <!-- header for page -->
-    <header>
-        <div class="header">
-            <div class="header-container">
-                <div class="left-bar">
-                    <div class="logo">
-                        <a href="{{ url_for('main') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
-                    </div>
-                    <nav>
-                        <ul>
-                            <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
-                            <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
-                            <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
-                            <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
-                        </ul>
-                    </nav>
-                </div>
+{% block title %}Binary to Decimal - NetQuizzer{% endblock %}
+
+{% block content %}
+<div class="main-container">
+    <section class="first section">
+        <div class="image">
+            <img src="{{ url_for('static', filename='images/presenting_trojan.png') }}" alt="presenting trojan">
+        </div>
+        <div class="text">
+            <h1>Binary to Decimal Challenge</h1>
+            <table class="bin_dec_table">
+                <thead>
+                    <tr>
+                        <th scope="col">128</th>
+                        <th scope="col">64</th>
+                        <th scope="col">32</th>
+                        <th scope="col">16</th>
+                        <th scope="col">8</th>
+                        <th scope="col">4</th>
+                        <th scope="col">2</th>
+                        <th scope="col">1</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <!-- decimal table, auto binary number input-->
+                        {% if game_over %}
+                        {% for bit in random_binary %}
+                            <td>{{ bit }}</td>
+                        {% endfor %}
+                    {% else %}
+                        {% for _ in range(8) %}
+                            <td>?</td>
+                        {% endfor %}
+                    {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+            <div class="question">
+                <!-- Display the random binary number generated in the backend -->
+                <p>Convert To Decimal: {{ random_binary }}</p>
+            </div>
+            <div class="userValue">
+                <!-- Form to capture user guess -->
+                {% if not game_over %}
+                    <form method="post">
+                        <!-- user's wrong guesses -->
+                        <div class="wrongGuesses" style="color: black">
+                            {% if wrong_guesses %}
+                                <u><strong>Previous Guesses</strong></u>: {% for guess in wrong_guesses %}<span style="color: red; font-weight: bold;">{{ guess }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
+                            {% endif %}
+                            
+                        </div>
+                        <label for="user_guess">Enter the Decimal Value:</label>
+                        <input type="number" id="user_guess" name="user_guess" required>
+                        <button type="submit" class="submitBtn">Submit</button>
+                        <p>Attempts Remaining: <span style="color: #D81B60;">{{ 3 - session.counter }}</span></p>
+                    </form>
+                   
+                {% endif %}
+                {% if game_over %}
+                    <form method="GET" action="{{ url_for('binary_to_decimal') }}">
+                        <button type="submit" class="playBtn">Play Again</button>
+                    </form>
+                    <form method="GET" action="{{ url_for('main') }}">
+                        <button type="submit" class="homeBtn">Return Home</button>
+                    </form>
+                {% endif %}
+            </div>
+            <div class="answer">
+                <!-- Display result after form submission -->
+                {% if result %}
+                <p>{{ result }}</p>
+                {% if correct %}
+                    <p>{{correct}}</p>
+                {% endif %}
+
+                {% endif %}
             </div>
         </div>
-    </header>
-
-    <!-- main body elements -->
-    <main>
-        <div class="main-container">
-            <section class="first section">
-                <div class="image">
-                    <img src="{{ url_for('static', filename='images/presenting_trojan.png') }}" alt="presenting trojan">
-                </div>
-                <div class="text">
-                    <h1>Binary to Decimal Challenge</h1>
-                    <table class="bin_dec_table">
-                        <thead>
-                            <tr>
-                                <th scope="col">128</th>
-                                <th scope="col">64</th>
-                                <th scope="col">32</th>
-                                <th scope="col">16</th>
-                                <th scope="col">8</th>
-                                <th scope="col">4</th>
-                                <th scope="col">2</th>
-                                <th scope="col">1</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <!-- decimal table, auto binary number input-->
-                                {% if game_over %}
-                                {% for bit in random_binary %}
-                                    <td>{{ bit }}</td>
-                                {% endfor %}
-                            {% else %}
-                                {% for _ in range(8) %}
-                                    <td>?</td>
-                                {% endfor %}
-                            {% endif %}
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="question">
-                        <!-- Display the random binary number generated in the backend -->
-                        <p>Convert To Decimal: {{ random_binary }}</p>
-                    </div>
-                    <div class="userValue">
-                        <!-- Form to capture user guess -->
-                        {% if not game_over %}
-                            <form method="post">
-                                <!-- user's wrong guesses -->
-                                <div class="wrongGuesses" style="color: black">
-                                    {% if wrong_guesses %}
-                                        <u><strong>Previous Guesses</strong></u>: {% for guess in wrong_guesses %}<span style="color: red; font-weight: bold;">{{ guess }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
-                                    {% endif %}
-                                    
-                                </div>
-                                <label for="user_guess">Enter the Decimal Value:</label>
-                                <input type="number" id="user_guess" name="user_guess" required>
-                                <button type="submit" class="submitBtn">Submit</button>
-                                <p>Attempts Remaining: <span style="color: #D81B60;">{{ 3 - session.counter }}</span></p>
-                            </form>
-                           
-                        {% endif %}
-                        {% if game_over %}
-                            <form method="GET" action="{{ url_for('binary_to_decimal') }}">
-                                <button type="submit" class="playBtn">Play Again</button>
-                            </form>
-                            <form method="GET" action="{{ url_for('main') }}">
-                                <button type="submit" class="homeBtn">Return Home</button>
-                            </form>
-                        {% endif %}
-                    </div>
-                    <div class="answer">
-                        <!-- Display result after form submission -->
-                        {% if result %}
-                        <p>{{ result }}</p>
-                        {% if correct %}
-                            <p>{{correct}}</p>
-                        {% endif %}
-
-                        {% endif %}
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-</body>
-</html>
-
-
+    </section>
+</div>
+{% endblock %}

@@ -1,34 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wildcard Mask Quiz</title>
+{% extends "base.html" %}
 
-    <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
-    <!-- links for reference -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
-<body>
-    <div class="header">
-        <div class="header-container">
-            <div class="left-bar">
-                <div class="logo">
-                    <a href="{{ url_for('main') }}"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo"></a>
-                </div>
-                <nav>
-                    <ul>
-                        <li><a href="{{url_for('binary_to_decimal')}}">Binary to Decimal</a></li>
-                        <li><a href="{{url_for('decimal_to_binary')}}">Decimal to Binary</a></li>
-                        <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
-                        <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </div>
+{% block title %}Binary to Decimal - NetQuizzer{% endblock %}
 
+{% block content %}
     <div class="main-container">
         <section class="first section">
             <div class="image">
@@ -107,5 +81,4 @@
             </div>
         </section>
     </div>
-</body>
-</html>
+{% endblock %}

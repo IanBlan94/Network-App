@@ -1,0 +1,208 @@
+:root {
+    --bg-color: #ffffff;
+    --text-color: rgba(0,0,0,.87);
+    --header-bg: #ffffff;
+    --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.207), 0 2px 2px rgba(0, 0, 0, 0.207);
+    --container-bg: #ffffff;
+    --border-color: #000000;
+    --link-color: #000000;
+    --link-hover: #edd309;
+    --button-bg-blue: #1E88E5;
+    --button-bg-purple: #A52DAD;
+    --button-text: white;
+    --input-border: #ddd;
+    --input-focus: #4a90e2;
+    --table-header-bg: #f2f2f2;
+    --correct-color: #086555;
+    --incorrect-color: #D81B60;
+    --result-box-bg: #f8f9fa;
+    --correct-bg: #e8f5e9;
+    --incorrect-bg: #fce4ec;
+}
+
+.dark-mode {
+    --bg-color: #121212;
+    --text-color: #e0e0e0;
+    --header-bg: #1e1e1e;
+    --header-shadow: 0 1px 3px rgba(255, 255, 255, 0.1), 0 2px 2px rgba(255, 255, 255, 0.1);
+    --container-bg: #1e1e1e;
+    --border-color: #555555;
+    --link-color: #e0e0e0;
+    --link-hover: #ffeb3b;
+    --button-bg-blue: #0d47a1;
+    --button-bg-purple: #7b1fa2;
+    --button-text: #f5f5f5;
+    --input-border: #444444;
+    --input-focus: #64b5f6;
+    --table-header-bg: #2c2c2c;
+    --correct-color: #66bb6a;
+    --incorrect-color: #f06292;
+    --result-box-bg: #2c2c2c;
+    --correct-bg: #1b5e20;
+    --incorrect-bg: #880e4f;
+}
+
+/* Base elements */
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Header styling */
+.header {
+    background-color: var(--header-bg);
+    box-shadow: var(--header-shadow);
+}
+
+.left-bar nav ul li a {
+    color: var(--link-color);
+}
+
+.left-bar nav ul li a:hover {
+    color: var(--link-hover);
+}
+
+/* Main content styling */
+.main-container {
+    background-color: var(--container-bg);
+    box-shadow: var(--header-shadow);
+}
+
+.section .text {
+    background-color: var(--container-bg);
+}
+
+.text h1, .text p, .text li {
+    color: var(--text-color);
+}
+
+.numlist li a:hover {
+    color: var(--link-hover);
+}
+
+/* Table styling */
+.bin_dec_table th {
+    border: 1px solid var(--border-color);
+    background-color: var(--table-header-bg);
+    color: var(--text-color);
+}
+
+.bin_dec_table td {
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+}
+
+/* Question and input styling */
+.question {
+    outline: 2px solid var(--border-color);
+}
+
+.question-row {
+    outline: 2px solid var(--border-color);
+}
+
+.question-text {
+    color: var(--text-color);
+}
+
+input {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+}
+
+input:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.2);
+}
+
+/* Result styling */
+.result-box {
+    background-color: var(--result-box-bg);
+    border: 2px solid var(--border-color);
+}
+
+.correct {
+    color: var(--correct-color);
+}
+
+.incorrect {
+    color: var(--incorrect-color);
+}
+
+.correct-value {
+    background-color: var(--correct-bg);
+    color: var(--text-color);
+}
+
+.incorrect-value {
+    background-color: var(--incorrect-bg);
+    color: var(--text-color);
+}
+
+/* Button styling */
+.submitBtn, .playBtn {
+    background-color: var(--button-bg-blue);
+    color: var(--button-text);
+}
+
+.homeBtn {
+    background-color: var(--button-bg-purple);
+    color: var(--button-text);
+}
+
+/* Theme switch toggle */
+.theme-switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.theme-switch {
+    display: inline-block;
+    height: 24px;
+    position: relative;
+    width: 50px;
+}
+
+.theme-switch input {
+    display: none;
+}
+
+.slider {
+    background-color: #ccc;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    background-color: #fff;
+    bottom: 4px;
+    content: "";
+    height: 16px;
+    left: 4px;
+    position: absolute;
+    transition: .4s;
+    width: 16px;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.theme-switch-wrapper .label {
+    margin-left: 10px;
+    font-size: 14px;
+}
