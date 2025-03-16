@@ -12,7 +12,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}TITLE-TEST{% endblock %}</title>
+    <title>{% block title %}NetQuizzer{% endblock %}</title>
     <link rel="icon" href="{{ url_for('static', filename='images/logo.png') }}" type="image/jpeg">
     <!-- Common CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/header.css') }}">
@@ -50,6 +50,14 @@
                 </div>
             </div>
         </div>
+        <script>
+            // Immediately restore dark mode to prevent flashing
+            (function() {
+              if (localStorage.getItem('darkMode') === 'true') {
+                document.documentElement.classList.add('dark-mode');
+              }
+            })();
+          </script>
     </header>
     
     <!-- main body elements -->
