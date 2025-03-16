@@ -1,45 +1,62 @@
+/* dark-mode.css - Updated with colorblind-friendly colors */
 :root {
+    /* Light mode colors */
     --bg-color: #ffffff;
     --text-color: rgba(0,0,0,.87);
     --header-bg: #ffffff;
     --header-shadow: 0 1px 3px rgba(0, 0, 0, 0.207), 0 2px 2px rgba(0, 0, 0, 0.207);
     --container-bg: #ffffff;
     --border-color: #000000;
-    --link-color: #000000;
-    --link-hover: #edd309;
-    --button-bg-blue: #1E88E5;
-    --button-bg-purple: #A52DAD;
+    
+    /* Colorblind-friendly colors */
+    --link-color: #0072B2;        /* Blue - distinguishable in most color blindness types */
+    --link-hover: #56B4E9;        /* Lighter blue - clear difference from link color */
+    
+    --button-bg-blue: #0072B2;    /* Blue primary button */
+    --button-bg-purple: #009E73;  /* Teal secondary button - better than purple */
     --button-text: white;
+    
     --input-border: #ddd;
-    --input-focus: #4a90e2;
+    --input-focus: #0072B2;
     --table-header-bg: #f2f2f2;
-    --correct-color: #086555;
-    --incorrect-color: #D81B60;
+    
+    /* Status colors */
+    --correct-color: #009E73;     /* Teal - distinguishable for protanopes and deuteranopes */
+    --incorrect-color: #D55E00;   /* Vermillion - distinguishable for tritanopes */
+    --correct-bg: #E8F5E9;        /* Light green background */
+    --incorrect-bg: #FFEBEE;      /* Light red background */
+    
     --result-box-bg: #f8f9fa;
-    --correct-bg: #e8f5e9;
-    --incorrect-bg: #fce4ec;
 }
 
 .dark-mode {
+    /* Dark mode colors */
     --bg-color: #121212;
     --text-color: #e0e0e0;
     --header-bg: #1e1e1e;
     --header-shadow: 0 1px 3px rgba(255, 255, 255, 0.1), 0 2px 2px rgba(255, 255, 255, 0.1);
     --container-bg: #1e1e1e;
     --border-color: #555555;
-    --link-color: #e0e0e0;
-    --link-hover: #ffeb3b;
-    --button-bg-blue: #0d47a1;
-    --button-bg-purple: #7b1fa2;
+    
+    /* Colorblind-friendly colors for dark mode */
+    --link-color: #56B4E9;        /* Lighter blue for links in dark mode */
+    --link-hover: #90CAF9;        /* Even lighter blue for hover in dark mode */
+    
+    --button-bg-blue: #0072B2;    /* Blue primary button */
+    --button-bg-purple: #009E73;  /* Teal secondary button */
     --button-text: #f5f5f5;
+    
     --input-border: #444444;
-    --input-focus: #64b5f6;
+    --input-focus: #56B4E9;
     --table-header-bg: #2c2c2c;
-    --correct-color: #66bb6a;
-    --incorrect-color: #f06292;
+    
+    /* Status colors for dark mode */
+    --correct-color: #00BFA5;     /* Brighter teal for dark mode */
+    --incorrect-color: #FF7043;   /* Brighter vermillion for dark mode */
+    --correct-bg: #1B5E20;        /* Darker green background */
+    --incorrect-bg: #C62828;      /* Darker red background */
+    
     --result-box-bg: #2c2c2c;
-    --correct-bg: #1b5e20;
-    --incorrect-bg: #880e4f;
 }
 
 /* Base elements */
@@ -57,10 +74,14 @@ body {
 
 .left-bar nav ul li a {
     color: var(--link-color);
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
 }
 
-.left-bar nav ul li a:hover {
+.left-bar nav ul li a:hover,
+.left-bar nav ul li a:focus {
     color: var(--link-hover);
+    transform: scale(1.05);
 }
 
 /* Main content styling */
@@ -77,8 +98,15 @@ body {
     color: var(--text-color);
 }
 
-.numlist li a:hover {
+.numlist li a {
+    color: var(--link-color);
+    transition: color 0.2s ease;
+}
+
+.numlist li a:hover,
+.numlist li a:focus {
     color: var(--link-hover);
+    text-decoration: underline;
 }
 
 /* Table styling */
@@ -114,7 +142,8 @@ input {
 
 input:focus {
     border-color: var(--input-focus);
-    box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.2);
+    box-shadow: 0 0 0 2px rgba(0, 114, 178, 0.2);
+    outline: none;
 }
 
 /* Result styling */
@@ -145,11 +174,30 @@ input:focus {
 .submitBtn, .playBtn {
     background-color: var(--button-bg-blue);
     color: var(--button-text);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.submitBtn:hover, .playBtn:hover,
+.submitBtn:focus, .playBtn:focus {
+    background-color: var(--link-hover);
+    transform: scale(1.05);
 }
 
 .homeBtn {
     background-color: var(--button-bg-purple);
     color: var(--button-text);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.homeBtn:hover, .homeBtn:focus {
+    filter: brightness(1.2);
+    transform: scale(1.05);
+}
+
+/* Enhanced focus states for accessibility */
+a:focus, button:focus, input:focus {
+    outline: 3px solid var(--link-hover);
+    outline-offset: 2px;
 }
 
 /* Theme switch toggle */
@@ -195,7 +243,7 @@ input:focus {
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: var(--button-bg-blue);
 }
 
 input:checked + .slider:before {
