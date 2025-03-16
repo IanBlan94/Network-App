@@ -1,6 +1,5 @@
 /* dark-mode.css - Updated with colorblind-friendly colors */
 :root {
-    /* Light mode colors */
     --bg-color: #ffffff;
     --text-color: rgba(0,0,0,.87);
     --header-bg: #ffffff;
@@ -29,6 +28,9 @@
     --result-box-bg: #f8f9fa;
 }
 
+/* Apply dark mode to both html and body elements */
+html.dark-mode,
+body.dark-mode,
 .dark-mode {
     /* Dark mode colors */
     --bg-color: #121212;
@@ -60,6 +62,10 @@
 }
 
 /* Base elements */
+html {
+    background-color: var(--bg-color);
+}
+
 body {
     background-color: var(--bg-color);
     color: var(--text-color);
