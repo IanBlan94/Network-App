@@ -4,7 +4,9 @@ import pandas as pd
 #import webview
 from wildcard_mask import calculate_subnet_address_map, prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask, generate_ip_and_prefix
 from classaddress import generate_random_classful_address, calculate_classful_analysis, validate_input 
-
+import sqlite3
+from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 
 headers = ["128", "64", "32", "16", "8", "4", "2", "1"]
 decimal_guess = pd.DataFrame(columns=['Random Binary', 'Correct Decimal', 'User Guess', 'Result'])
@@ -16,10 +18,106 @@ app= Flask(__name__)
 app.secret_key = 'theonekey'
 #webview.create_window("Networking Application",app)
 
+def init_db():
+    """Initialize the database and create a 'users' & 'pets' table if it doesn't exist."""
+    with sqlite3.connect('database.db') as conn:
+        conn.execute('''
+        CREATE TABLE IF NOT EXISTS users
+        (username TEXT PRIMARY KEY,
+         password TEXT NOT NULL,
+         profile_picture TEXT)
+        ''')
 
+@app.before_request
+def before_first_request():
+    """Run database initialization before the first request."""
+    init_db()
+    
+@app.context_processor
+def inject_user():
+    """Inject the current logged-in username into all templates."""
+    return dict(username=session.get('username'))
+
+def get_user_details(username):
+    """Retrieve user details from the database by username.
+    Args:
+        username (str): The username of the user.
+    Returns:
+        tuple: A tuple containing user details (username, bio, profile_picture, joined_date).
+    """
+    with sqlite3.connect('database.db') as conn:
+        c = conn.cursor()
+        c.execute('SELECT username, profile_picture FROM users WHERE username = ?', (username,))
+        return c.fetchone()
+    
+
+
+# Route for user login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """Handle user login.
+    GET: Render the login page.
+    POST: Validate user credentials and log in the user.
+    """
+    message = ''
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Fetch user from the database
+        with sqlite3.connect('database.db') as conn:
+            c = conn.cursor()
+            c.execute('SELECT username, password FROM users WHERE username = ?', (username,))
+            user = c.fetchone()
+            
+            # Validate password
+            if user and check_password_hash(user[1], password):
+                session['username'] = username
+                return redirect(url_for('main'))
+            message = 'Invalid username or password!'
+        
+    return render_template('login.html', message=message)
+
+# Route for user logout
+@app.route('/logout')
+def logout():
+    """Log out the user by clearing their session."""
+    
+    session.pop('username', None)
+    return redirect(url_for('main'))
+
+# Route for user registration
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    """Handle user registration.
+    GET: Render the registration page.
+    POST: Create a new user account.
+    """
+    message = ''
+    if request.method == 'POST':
+        username = request.form['username']
+        password = generate_password_hash(request.form['password'])
+        try:
+            # Insert new user into the database
+            with sqlite3.connect('database.db') as conn:
+                conn.execute(
+                    'INSERT INTO users (username, password, profile_picture) VALUES (?, ?, ?)',
+                    (username, password, None)
+                )
+                return redirect(url_for('login'))
+        except sqlite3.IntegrityError:
+            message = 'Username Already Exists'
+            
+    return render_template('registration.html', message=message)
 @app.route('/')
 def main():
+    """Render the main page if logged in, otherwise render the login page."""
+    
+    if 'username' in session:
+        user = get_user_details(session['username'])
+        return render_template('main.html', user=user)
     return render_template('main.html')
+
 
 
 @app.route("/decimal-to-binary", methods=['GET', 'POST'])
@@ -74,9 +172,21 @@ def decimal_to_binary():
             
         except ValueError:
             result = "Invalid input. Please enter an 8-bit binary number."
-
+            
+    if 'username' in session:
+        user = get_user_details(session['username'])
+        return render_template('decimaltobinary.html',
+                           user=user, 
+                           random_decimal=random_decimal, 
+                           random_binary=session.get('random_binary'),
+                           result=result, 
+                           correct=correct, 
+                           headers=headers, game_over=session['game_over'],
+                           wrong_guesses=session.get('wrong_guesses', []))
+    else:
+        
     # Render template with the random decimal and result message
-    return render_template('decimaltobinary.html', 
+        return render_template('decimaltobinary.html',
                            random_decimal=random_decimal, 
                            random_binary=session.get('random_binary'),
                            result=result, 
@@ -87,6 +197,7 @@ def decimal_to_binary():
 
 @app.route("/binary-to-decimal", methods=['GET', 'POST'])
 def binary_to_decimal():
+    
         # Generate a new decimal-binary pair if the request is GET (page load)
     if request.method == 'GET' or 'random_decimal' not in session:
         random_decimal = random.randint(0, 255)
@@ -132,18 +243,28 @@ def binary_to_decimal():
             decimal_guess.to_csv('binary_to_decimal_results.csv', index=False)
         except ValueError:
             result = "Invalid input. Please enter a valid decimal number."   
-    
-    
-    # Render template with the random binary and result message
-    return render_template('binarytodecimal.html', 
-                           random_binary=random_binary,
-                           random_decimal=session.get('random_decimal'),
-                           correct=correct, 
-                           result=result, 
-                           headers=headers, 
-                           game_over=session['game_over'],
-                           wrong_guesses=session.get('wrong_guesses', []))
-  
+    if 'username' in session:
+        user = get_user_details(session['username'])
+        return render_template('binarytodecimal.html', 
+                        user=user,
+                        random_binary=random_binary,
+                        random_decimal=session.get('random_decimal'),
+                        correct=correct, 
+                        result=result, 
+                        headers=headers, 
+                        game_over=session['game_over'],
+                        wrong_guesses=session.get('wrong_guesses', []))
+    else:
+        return render_template('binarytodecimal.html', 
+
+                        random_binary=random_binary,
+                        random_decimal=session.get('random_decimal'),
+                        correct=correct, 
+                        result=result, 
+                        headers=headers, 
+                        game_over=session['game_over'],
+                        wrong_guesses=session.get('wrong_guesses', []))
+        
     
 @app.route('/subnet-quiz', methods=['GET', 'POST'])
 def subnet_quiz_route():
@@ -212,10 +333,18 @@ def subnet_quiz_route():
 
         wildcardmak_results.to_csv('subnet_quiz_results.csv', index=False)
 
-    return render_template("wildcardmask.html",
-                         question=session["question"],
-                         answers=session["answers"],
-                         results=result)
+    if 'username' in session:
+        user = get_user_details(session['username'])
+        return render_template("wildcardmask.html",
+                            user=user,
+                            question=session["question"],
+                            answers=session["answers"],
+                            results=result)
+    else:
+         return render_template("wildcardmask.html",
+                            question=session["question"],
+                            answers=session["answers"],
+                            results=result)
 
 @app.route("/classful_quiz", methods=["GET", "POST"])
 def classful_quiz():
@@ -291,10 +420,18 @@ def classful_quiz():
         # Save results to CSV after each quiz
         classful_quiz_results.to_csv('classful_quiz_results.csv', index=False)
 
-    return render_template("classfuladdress.html",
-                           question=session["question"],
-                           answers=session["answers"],
-                           results=result)
+    if 'username' in session:
+        user = get_user_details(session['username'])
+        return render_template("classfuladdress.html",
+                            user=user,
+                            question=session["question"],
+                            answers=session["answers"],
+                            results=result)
+    else:
+        return render_template("classfuladdress.html",
+                            question=session["question"],
+                            answers=session["answers"],
+                            results=result)
 if __name__ == '__main__':
     app.run(debug=True)
     #webview.start()
