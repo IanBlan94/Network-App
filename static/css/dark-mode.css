@@ -236,10 +236,15 @@ a:focus, button:focus, input:focus {
     border-radius: 34px;
 }
 
+/* Sun icon (light mode) */
 .slider:before {
     background-color: #fff;
     bottom: 4px;
-    content: "";
+    content: "☀️";  /* Sun emoji */
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     height: 16px;
     left: 4px;
     position: absolute;
@@ -249,14 +254,22 @@ a:focus, button:focus, input:focus {
 }
 
 input:checked + .slider {
-    background-color: var(--button-bg-blue);
+    background-color: #2196F3;
 }
 
+/* Moon icon (dark mode) */
 input:checked + .slider:before {
     transform: translateX(26px);
+    content: "🌙";  /* Moon emoji */
 }
 
 .theme-switch-wrapper .label {
-    margin-left: 10px;
-    font-size: 14px;
+    display: none;
+}
+
+.auth-toggle-container .theme-switch-wrapper {
+    background-color: var(--container-bg);
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
