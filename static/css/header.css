@@ -86,3 +86,24 @@ a {
     }
 }
 
+.profile-picture {
+    width: 30px;        /* Adjust the size as needed */
+    height: 40px;       /* Make it square */
+    overflow: hidden;   /* Prevent image overflow */
+    border-radius: 50%; /* Make the image circular */
+    display: flex;      /* Center image properly */
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-picture img {
+    width: 100%;        /* Scale image to fit the container */
+    height: 100%;       /* Scale image to fit the container */
+    object-fit: cover;  /* Ensure image is cropped to fill the circle */
+}
+
+.profile-picture a {
+    text-decoration: none;  /* Ensures no underline on the link */
+    display: inline-block;  /* To make sure the image is treated like a block-level element */
+}
+

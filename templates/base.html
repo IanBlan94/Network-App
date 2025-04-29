@@ -44,17 +44,25 @@
                               <li><a href="{{url_for('classful_quiz')}}">Classful Address Analysis</a></li>
                               <li><a href="{{url_for('subnet_quiz_route')}}">Wildcard Mask Practice</a></li>
                               <li>
-                                <a>{% if username %}
+                                {% if username %}
+                                    <div class="profile-picture">
+                                        <a href="{{ url_for('profile') }}">
+                                            <img 
+                                              src="{{ url_for('static', filename='uploads/' + user[2]) if user[2] else url_for('static', filename='images/default-profile.png') }}" 
+                                              alt="Profile Picture"  
+                                              class="profile-img"
+                                            >
+                                          </a>
+                                {% endif %}  
+                              </li>
+                              <li>
+                                {% if username %}
                                     <div>
-                                        {% if user[2] %}
-                                            <img src="{{ url_for('static', filename='uploads/' + user[2]) }}" alt="Profile Picture" class="profile-img">
-                                        {% endif %}
                                         <a href="{{url_for('logout')}}" >Logout</a>
                                     </div>
                                 {% else %}
                                     <a href="{{url_for('login')}}">Login</a>
                                 {% endif %}
-                                </a>
                             </li>
                           </ul>
                       </nav>

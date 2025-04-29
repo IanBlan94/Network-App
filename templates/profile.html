@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>{{ username }}'s Profile</h1>
+
+    <!-- Binary to Decimal Table -->
+    <div class="profile-page">
+        <h2>Binary to Decimal Results</h2>
+        {% if user_data.binary_to_decimal.is_empty %}
+            <p>{{ user_data.binary_to_decimal.message }}</p>
+        {% else %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Binary</th>
+                        <th>Decimal</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in user_data.binary_to_decimal.data.iterrows() %}
+                        <tr>
+                            <td>{{ row['Binary'] }}</td>
+                            <td>{{ row['Decimal'] }}</td>
+                            <td>{{ row['Result'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <form method="POST" action="{{ url_for('delete_results', quiz_type='binary_to_decimal') }}">
+                <button type="submit">Delete Binary to Decimal Results</button>
+            </form>
+        {% endif %}
+
+        <!-- Decimal to Binary Table -->
+        <h2>Decimal to Binary Results</h2>
+        {% if user_data.decimal_to_binary.is_empty %}
+            <p>{{ user_data.decimal_to_binary.message }}</p>
+        {% else %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Decimal</th>
+                        <th>Binary</th>
+                        <th>Your Guess</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in user_data.decimal_to_binary.data.iterrows() %}
+                        <tr>
+                            <td>{{ row['Decimal'] }}</td>
+                            <td>{{ row['Binary'] }}</td>
+                            <td>{{ row['Your Guess'] }}</td>
+                            <td>{{ row['Result'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <form method="POST" action="{{ url_for('delete_results', quiz_type='decimal_to_binary') }}">
+                <button type="submit">Delete Decimal To Binary Results</button>
+            </form>
+        {% endif %}
+
+        <!-- Classful Quiz Table -->
+        <h2>Classful Quiz Results</h2>
+        {% if user_data.classful_quiz.is_empty %}
+            <p>{{ user_data.classful_quiz.message }}</p>
+        {% else %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>CIDR Prefix</th>
+                        <th>Question</th>
+                        <th>User Answer</th>
+                        <th>Correct Answer</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in user_data.classful_quiz.data.iterrows() %}
+                        <tr>
+                            <td>{{ row['IP Address'] }}</td>
+                            <td>{{ row['CIDR Prefix'] }}</td>
+                            <td>{{ row['question'] }}</td>
+                            <td>{{ row['user_answer'] }}</td>
+                            <td>{{ row['correct_answer'] }}</td>
+                            <td>{{ row['Result'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <form method="POST" action="{{ url_for('delete_results', quiz_type='classful_quiz') }}">
+                <button type="submit">Delete Classful Quiz Results</button>
+            </form>
+        {% endif %}
+
+        <!-- Subnet Quiz Table -->
+        <h2>Address Map & Masks Results</h2>
+        {% if user_data.subnet_quiz.is_empty %}
+            <p>{{ user_data.subnet_quiz.message }}</p>
+        {% else %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>CIDR Prefix</th>
+                        <th>Question</th>
+                        <th>User Answer</th>
+                        <th>Correct Answer</th>
+                        <th>Result</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for index, row in user_data.subnet_quiz.data.iterrows() %}
+                        <tr>
+                            <td>{{ row['IP Address'] }}</td>
+                            <td>{{ row['Prefix Length'] }}</td>
+                            <td>{{ row['question'] }}</td>
+                            <td>{{ row['user_answer'] }}</td>
+                            <td>{{ row['correct_answer'] }}</td>
+                            <td>{{ row['Result'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <form method="POST" action="{{ url_for('delete_results', quiz_type='subnet_quiz') }}">
+                <button type="submit">Delete Subnet Quiz Results</button>
+            </form>
+        {% endif %}
+    </div>
+
+{% endblock %}
