@@ -174,6 +174,7 @@ def decimal_to_binary():
     # Default result for initial load
     result = None
     correct = None
+    answer = None
 
     # Process the form submission (POST request)
     if request.method == 'POST':
@@ -187,16 +188,19 @@ def decimal_to_binary():
             if user_guess == random_binary:
                 result = f"Congratulations! You got it right!" 
                 correct = f"Correct Answer: {user_guess}"
+                answer = "Correct"
                 session['game_over'] = True
                 session['wrong_guesses'].clear()
             else:
                 session['wrong_guesses'].append(user_guess)  # Save wrong guess
                 if session['counter'] >= 2:
                     result = f"Sorry, you've used all 3 tries! Correct answer: {random_binary}."
+                    answer = f"Incorrect"
                     session['game_over'] = True  # Set game over to True
                     session['wrong_guesses'].clear()
                 else:
                     result = f"Good Effort! Please try again."
+                    answer = f"Incorrect"
             session['counter'] += 1
 
             # Save user result dynamically
@@ -205,7 +209,8 @@ def decimal_to_binary():
                 'Decimal': random_decimal,
                 'Binary': random_binary,
                 'Your Guess': user_guess,
-                'Result': result
+                'Result': answer,
+                'Correct': user_guess == random_binary
             }
 
             if username:
@@ -218,6 +223,7 @@ def decimal_to_binary():
                 else:
                     df = pd.DataFrame([entry])
 
+                df['Result'] = df['Correct'].apply(lambda x: '✓ Correct!' if x else '✗ Incorrect')
                 df.to_csv(user_filename, index=False)
             else:
                 # Save in session temporarily
@@ -281,14 +287,17 @@ def binary_to_decimal():
                 correct = f"Correct Answer: {user_guess}"
                 session['game_over'] = True
                 session['wrong_guesses'].clear()
+                answer = f"Correct"
             else:
                 session['wrong_guesses'].append(user_guess)
                 if session['counter'] >= 2:
                     result = f"Sorry, you've used all 3 tries! Correct answer: {random_decimal}."
                     session['game_over'] = True
                     session['wrong_guesses'].clear()
+                    answer = f"Incorrect"
                 else:
                     result = f"Good Effort! Please try again."
+                    answer = f"Incorrect"
             session['counter'] += 1
 
             # Save user result dynamically
@@ -297,8 +306,10 @@ def binary_to_decimal():
                 'Binary': random_binary,
                 'Decimal': random_decimal,
                 'Your Guess': user_guess,
-                'Result': result
+                'Result': answer,
+                'Correct': user_guess == random_decimal
             }
+
 
             if username:
                 os.makedirs('user_data', exist_ok=True)
@@ -309,7 +320,8 @@ def binary_to_decimal():
                     df = pd.concat([df, pd.DataFrame([entry])], ignore_index=True)
                 else:
                     df = pd.DataFrame([entry])
-
+                
+                df['Result'] = df['Correct'].apply(lambda x: '✓ Correct!' if x else '✗ Incorrect')
                 df.to_csv(user_filename, index=False)
             else:
                 # Save in session temporarily
