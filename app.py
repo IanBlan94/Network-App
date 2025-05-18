@@ -2,7 +2,7 @@ from flask import Flask, flash, render_template, request, redirect, url_for, ses
 import random
 import pandas as pd
 import os
-#import webview
+import webview
 from wildcard_mask import calculate_subnet_address_map, prefix_host_bits, prefix_length_to_subnet_mask, prefix_network_bits, get_address_class_and_pattern, load_questions_from_csv, subList, calculate_wildcard_mask, generate_ip_and_prefix
 from classaddress import generate_random_classful_address, calculate_classful_analysis, validate_input 
 import sqlite3
@@ -17,7 +17,7 @@ classful_quiz_results = pd.DataFrame(columns=['IP Address', 'CIDR Prefix', 'Addr
 
 app= Flask(__name__)
 app.secret_key = 'theonekey'
-#webview.create_window("Networking Application",app)
+webview.create_window("Networking Application",app)
 
 def init_db():
     """Initialize the database and create a 'users' & 'pets' table if it doesn't exist."""
@@ -562,7 +562,7 @@ def delete_results(quiz_type):
     return redirect(url_for('profile'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
-    #webview.start()
+    #app.run(debug=True)
+    webview.start()
 
 
